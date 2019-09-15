@@ -1,4 +1,4 @@
-package com.rbittencourt.aws.cost.miner.config;
+package com.rbittencourt.aws.cost.miner.infrastructure.config;
 
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;

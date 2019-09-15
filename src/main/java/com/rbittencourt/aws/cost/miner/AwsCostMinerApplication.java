@@ -1,7 +1,7 @@
 package com.rbittencourt.aws.cost.miner;
 
-import com.rbittencourt.aws.cost.miner.billing.BillingLineInfo;
-import com.rbittencourt.aws.cost.miner.file.CsvReaderService;
+import com.rbittencourt.aws.cost.miner.domain.billing.BillingLineInfo;
+import com.rbittencourt.aws.cost.miner.infrastructure.file.CsvReaderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package com.rbittencourt.aws.cost.miner.file;
+package com.rbittencourt.aws.cost.miner.infrastructure.file;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectReader;

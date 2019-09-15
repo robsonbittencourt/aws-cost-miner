@@ -1,10 +1,10 @@
-package com.rbittencourt.aws.cost.miner.billing;
+package com.rbittencourt.aws.cost.miner.domain.billing;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.rbittencourt.aws.cost.miner.config.serialization.BooleanDeserializer;
-import com.rbittencourt.aws.cost.miner.config.serialization.LocalDateTimeDeserializer;
+import com.rbittencourt.aws.cost.miner.infrastructure.config.serialization.BooleanDeserializer;
+import com.rbittencourt.aws.cost.miner.infrastructure.config.serialization.LocalDateTimeDeserializer;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
