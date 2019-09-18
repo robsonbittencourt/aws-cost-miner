@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static java.math.RoundingMode.HALF_EVEN;
+
 @Component
 @Order(0)
 public class TotalCostMetric implements Metric {
@@ -22,7 +24,7 @@ public class TotalCostMetric implements Metric {
     }
 
     public String calculateMetric(List<BillingInfo> billingInfos) {
-        BigDecimal totalCost = billingQuery.totalCost(billingInfos);
+        BigDecimal totalCost = billingQuery.totalCost(billingInfos).setScale(2, HALF_EVEN);
 
         return "Total cost: " + totalCost + "\n";
     }

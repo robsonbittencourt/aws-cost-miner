@@ -11,6 +11,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
+import static java.math.RoundingMode.HALF_EVEN;
 import static java.util.stream.Collectors.toMap;
 
 @Component
@@ -31,15 +32,16 @@ public class CostByTypeMetric implements Metric {
     public String calculateMetric(List<BillingInfo> billingInfo) {
         Map<String, List<BillingInfo>> billingByUsageType = billingQuery.groupBy(billingInfo, BillingInfo::getUsageType);
 
-        Map<String, BigDecimal> collect = billingByUsageType.entrySet().stream()
+        Map<String, BigDecimal> totalCostByUsageType = billingByUsageType.entrySet().stream()
                 .collect(toMap(
                         Map.Entry::getKey,
                         e -> billingQuery.totalCost(e.getValue())
                 ));
 
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, BigDecimal> entry : collect.entrySet()) {
-            sb.append("\t").append(entry.getKey()).append(": ").append(FORMATTER.format(entry.getValue())).append("\n");
+        for (Map.Entry<String, BigDecimal> entry : totalCostByUsageType.entrySet()) {
+            BigDecimal value = entry.getValue().setScale(2, HALF_EVEN);
+            sb.append("\t").append(entry.getKey()).append(": ").append(value).append("\n");
         }
 
         return sb.toString();
