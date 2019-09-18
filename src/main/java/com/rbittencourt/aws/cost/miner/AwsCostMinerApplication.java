@@ -1,31 +1,25 @@
 package com.rbittencourt.aws.cost.miner;
 
-import com.rbittencourt.aws.cost.miner.domain.billing.BillingLineInfo;
-import com.rbittencourt.aws.cost.miner.infrastructure.file.CsvReaderService;
+import com.rbittencourt.aws.cost.miner.domain.report.ec2.Ec2Report;
+import com.rbittencourt.aws.cost.miner.domain.report.ReportWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
 
 @SpringBootApplication
 public class AwsCostMinerApplication {
 
 	@Autowired
-	private CsvReaderService csvReaderService;
+	private Ec2Report ec2Report;
+
+	@Autowired
+	private ReportWriter reportWriter;
 
 	@PostConstruct
 	public void start() {
-		String userDir = System.getProperty("user.dir");
-
-		List<BillingLineInfo> list = csvReaderService.csvToObjects(userDir + "/data.csv", BillingLineInfo.class);
-
-		int count = 0;
-		for (BillingLineInfo billingLineInfo : list) {
-			System.out.println(count + ": " + billingLineInfo);
-			count++;
-		}
+		reportWriter.write(ec2Report);
 	}
 
 	public static void main(String[] args) {

@@ -7,13 +7,12 @@ import com.rbittencourt.aws.cost.miner.infrastructure.config.serialization.Boole
 import com.rbittencourt.aws.cost.miner.infrastructure.config.serialization.LocalDateTimeDeserializer;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BillingLineInfo {
+public class BillingInfo {
 
     @JsonProperty("ProductName")
     private String productName;
@@ -39,10 +38,10 @@ public class BillingLineInfo {
     @JsonProperty("Cost")
     private BigDecimal cost;
 
-    private Map<String, Object> otherFields = new LinkedHashMap<>();
+    private Map<String, String> otherFields = new LinkedHashMap<>();
 
     @JsonAnySetter
-    void setOtherFields(String key, Object value) {
+    void setOtherFields(String key, String value) {
         if (!notMappedFields().contains(key)) {
             otherFields.put(key, value);
         }
@@ -110,19 +109,8 @@ public class BillingLineInfo {
         this.cost = cost;
     }
 
-    @Override
-    public String toString() {
-        DecimalFormat formatter = new DecimalFormat("0.0000000000");
-
-        return "BillingLineInfo{" +
-                "productName='" + productName + '\'' +
-                ", usageType='" + usageType + '\'' +
-                ", availabilityZone='" + availabilityZone + '\'' +
-                ", reservedInstance=" + reservedInstance +
-                ", usageStartDate=" + usageStartDate +
-                ", usageEndDate=" + usageEndDate +
-                ", cost=" + formatter.format(cost) +
-                ", other=" + otherFields +
-                '}';
+    public String getCustomField(String customFieldName) {
+        return otherFields.get(customFieldName);
     }
+
 }
