@@ -1,14 +1,14 @@
-package com.rbittencourt.aws.cost.miner.domain.report.ec2;
+package com.rbittencourt.aws.cost.miner.domain.awsservice.ec2;
 
+import com.rbittencourt.aws.cost.miner.domain.awsservice.AwsProduct;
 import com.rbittencourt.aws.cost.miner.domain.metric.Metric;
-import com.rbittencourt.aws.cost.miner.domain.report.Report;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-public class Ec2Report implements Report {
+public class EC2 implements AwsProduct {
 
     @Autowired
     private List<Metric> metrics;

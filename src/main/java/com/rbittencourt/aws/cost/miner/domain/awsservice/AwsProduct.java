@@ -1,10 +1,10 @@
-package com.rbittencourt.aws.cost.miner.domain.report;
+package com.rbittencourt.aws.cost.miner.domain.awsservice;
 
 import com.rbittencourt.aws.cost.miner.domain.metric.Metric;
 
 import java.util.List;
 
-public interface Report {
+public interface AwsProduct {
 
     String description();
 

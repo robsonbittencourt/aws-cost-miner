@@ -1,6 +1,6 @@
 package com.rbittencourt.aws.cost.miner;
 
-import com.rbittencourt.aws.cost.miner.domain.Miner;
+import com.rbittencourt.aws.cost.miner.application.report.ConsoleCostReport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,11 +11,11 @@ import javax.annotation.PostConstruct;
 public class AwsCostMinerApplication {
 
 	@Autowired
-	private Miner miner;
+	private ConsoleCostReport report;
 
 	@PostConstruct
 	public void start() {
-		miner.miningData();
+		report.writeReport();
 	}
 
 	public static void main(String[] args) {
