@@ -2,23 +2,20 @@ package com.rbittencourt.aws.cost.miner.domain.metric;
 
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfo;
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingQuery;
+import com.rbittencourt.aws.cost.miner.domain.mask.MoneyMaskedValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
-import static java.math.RoundingMode.HALF_EVEN;
-import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.toList;
 
 @Component
 @Order(1)
-public class CostByTypeMetric implements Metric {
-
-    private static final DecimalFormat FORMATTER = new DecimalFormat("0.0000000000");
+class CostByTypeMetric implements Metric {
 
     @Autowired
     private BillingQuery billingQuery;
@@ -29,22 +26,17 @@ public class CostByTypeMetric implements Metric {
     }
 
     @Override
-    public String calculateMetric(List<BillingInfo> billingInfo) {
+    public MetricResult calculateMetric(List<BillingInfo> billingInfo) {
         Map<String, List<BillingInfo>> billingByUsageType = billingQuery.groupBy(billingInfo, BillingInfo::getUsageType);
 
-        Map<String, BigDecimal> totalCostByUsageType = billingByUsageType.entrySet().stream()
-                .collect(toMap(
-                        Map.Entry::getKey,
-                        e -> billingQuery.totalCost(e.getValue())
-                ));
+        List<MetricValue> metricValues = billingByUsageType.entrySet().parallelStream()
+                .map(e -> {
+                    BigDecimal totalCost = billingQuery.totalCost(e.getValue());
+                    return new MetricValue(e.getKey(), totalCost, new MoneyMaskedValue(totalCost));
+                })
+                .collect(toList());
 
-        StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, BigDecimal> entry : totalCostByUsageType.entrySet()) {
-            BigDecimal value = entry.getValue().setScale(2, HALF_EVEN);
-            sb.append("\t").append(entry.getKey()).append(": ").append(value).append("\n");
-        }
-
-        return sb.toString();
+        return new MetricResult(description(), metricValues);
     }
 
 }

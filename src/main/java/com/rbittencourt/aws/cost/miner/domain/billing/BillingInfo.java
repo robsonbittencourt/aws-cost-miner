@@ -15,7 +15,7 @@ import java.util.Map;
 public class BillingInfo {
 
     @JsonProperty("ProductName")
-    private String productName;
+    private String serviceName;
 
     @JsonProperty("UsageType")
     private String usageType;
@@ -53,12 +53,12 @@ public class BillingInfo {
                 "ItemDescription", "UsageQuantity", "Rate", "ResourceId");
     }
 
-    public String getProductName() {
-        return productName;
+    public String getServiceName() {
+        return serviceName;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 
     public String getUsageType() {

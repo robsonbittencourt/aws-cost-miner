@@ -8,6 +8,6 @@ public interface Metric {
 
     String description();
 
-    String calculateMetric(List<BillingInfo> billingInfos);
+    MetricResult calculateMetric(List<BillingInfo> billingInfos);
 
 }

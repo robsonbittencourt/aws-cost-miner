@@ -17,18 +17,18 @@ public class BillingQuery {
 
     @SafeVarargs
     public final List<BillingInfo> filter(List<BillingInfo> lineInfos, Predicate<BillingInfo> ...criteria) {
-        return lineInfos.stream()
+        return lineInfos.parallelStream()
                 .filter(stream(criteria).reduce(x -> true, Predicate::and))
                 .collect(Collectors.toList());
     }
 
     public Map<String, List<BillingInfo>> groupBy(List<BillingInfo> lineInfos, Function<BillingInfo, String> criterion) {
-        return lineInfos.stream()
+        return lineInfos.parallelStream()
                 .collect(groupingBy(criterion));
     }
 
     public BigDecimal totalCost(List<BillingInfo> lineInfos) {
-        return lineInfos.stream()
+        return lineInfos.parallelStream()
                 .map(BillingInfo::getCost)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
