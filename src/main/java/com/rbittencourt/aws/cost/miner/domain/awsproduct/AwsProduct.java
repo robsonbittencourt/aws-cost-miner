@@ -15,4 +15,14 @@ public enum AwsProduct {
         return name;
     }
 
+    public static AwsProduct fromName(String name) {
+        for (AwsProduct value : values()) {
+            if (value.name.equals(name)) {
+                return value;
+            }
+        }
+
+        return null;
+    }
+
 }
