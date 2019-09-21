@@ -32,6 +32,7 @@ class CostByTypeMetric implements Metric {
         Map<String, List<BillingInfo>> billingByUsageType = billingQuery.groupBy(billingInfo, BillingInfo::getUsageType);
 
         List<MetricValue> metricValues = billingByUsageType.entrySet().parallelStream()
+                .filter(e -> !e.getKey().isEmpty())
                 .map(e -> {
                     BigDecimal totalCost = billingQuery.totalCost(e.getValue());
                     return new MetricValue(e.getKey(), totalCost, new MoneyMaskedValue(totalCost));
