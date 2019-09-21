@@ -87,7 +87,7 @@ public class ConsoleCostReport {
         SearchParameters searchParameters = new SearchParameters();
 
         if (awsProduct != null) {
-            searchParameters.addFilter(b -> awsProduct.getName().equals(b.getProductName()));
+            searchParameters.addFilter(b -> awsProduct.getDescription().equals(b.getProductName()));
         }
 
         if (groupBy != null) {

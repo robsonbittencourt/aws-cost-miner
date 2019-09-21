@@ -13,19 +13,11 @@ public class MetricsFactory {
     private List<Metric> metrics;
 
     public List<Metric> build(AwsProduct serviceType) {
-        if (serviceType == null) {
-            return metrics;
-        }
-
         if (AwsProduct.EC2.equals(serviceType)) {
             return metrics;
         }
 
-        if (AwsProduct.SQS.equals(serviceType)) {
-            return metrics;
-        }
-
-        throw new IllegalArgumentException(String.format("Service type %s is not valid", serviceType.getClass().toString()));
+        return metrics;
     }
 
 }

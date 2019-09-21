@@ -10,11 +10,6 @@ public class MetricValue {
     private BigDecimal value;
     private MaskedValue maskedValue;
 
-    public MetricValue(String description, BigDecimal value) {
-        this.description = description;
-        this.value = value;
-    }
-
     public MetricValue(String description, BigDecimal value, MaskedValue maskedValue) {
         this.description = description;
         this.value = value;

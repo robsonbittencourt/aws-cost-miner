@@ -6,6 +6,8 @@ import static java.math.RoundingMode.HALF_EVEN;
 
 public class MoneyMaskedValue implements MaskedValue {
 
+    private static final String DOLLAR = "$";
+
     private BigDecimal value;
 
     public MoneyMaskedValue(BigDecimal value) {
@@ -18,7 +20,7 @@ public class MoneyMaskedValue implements MaskedValue {
             return "";
         }
 
-        return "$" + value.setScale(2, HALF_EVEN).toString();
+        return DOLLAR + value.setScale(2, HALF_EVEN).toString();
     }
 
 }

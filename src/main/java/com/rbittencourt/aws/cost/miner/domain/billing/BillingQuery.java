@@ -14,7 +14,9 @@ import static java.util.stream.Collectors.groupingBy;
 @Component
 public class BillingQuery {
 
-    public final List<BillingInfo> filter(List<BillingInfo> lineInfos, List<Predicate<BillingInfo>> criteria) {
+    private static final String WITHOUT_GROUPER = "Without grouper";
+
+    public List<BillingInfo> filter(List<BillingInfo> lineInfos, List<Predicate<BillingInfo>> criteria) {
         if (criteria == null || criteria.isEmpty()) {
             return lineInfos;
         }
@@ -26,7 +28,7 @@ public class BillingQuery {
 
     public Map<String, List<BillingInfo>> groupBy(List<BillingInfo> lineInfos, Function<BillingInfo, String> criterion) {
         if (criterion == null) {
-            return Map.of("Without grouper", lineInfos);
+            return Map.of(WITHOUT_GROUPER, lineInfos);
         }
 
         return lineInfos.parallelStream()

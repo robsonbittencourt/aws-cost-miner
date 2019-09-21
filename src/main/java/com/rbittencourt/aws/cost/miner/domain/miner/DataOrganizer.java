@@ -17,6 +17,8 @@ import static java.util.stream.Collectors.toMap;
 @Component
 class DataOrganizer {
 
+    private static final String ROUNDING = "Rounding";
+
     @Autowired
     private BillingInfoRepository repository;
 
@@ -26,7 +28,7 @@ class DataOrganizer {
     Map<String, List<BillingInfo>> organizeData(SearchParameters parameters) {
         List<BillingInfo> billingInfos = repository.findBillingInfos();
 
-        parameters.addFilter(b -> !b.getProductName().isEmpty() || b.getRecordType().equals("Rounding"));
+        parameters.addFilter(b -> !b.getProductName().isEmpty() || b.getRecordType().equals(ROUNDING));
         List<BillingInfo> filteredBillingInfos = billingQuery.filter(billingInfos, parameters.getFilters());
 
         Map<String, List<BillingInfo>> groupedBillingInfos = billingQuery.groupBy(filteredBillingInfos, parameters.getGroupBy());

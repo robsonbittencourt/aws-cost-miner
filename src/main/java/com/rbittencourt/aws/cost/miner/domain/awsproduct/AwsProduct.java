@@ -2,22 +2,21 @@ package com.rbittencourt.aws.cost.miner.domain.awsproduct;
 
 public enum AwsProduct {
 
-    EC2("Amazon Elastic Compute Cloud"),
-    SQS("Amazon Simple Queue Service");
+    EC2("Amazon Elastic Compute Cloud");
 
-    private String name;
+    private String description;
 
-    AwsProduct(String name) {
-        this.name = name;
+    AwsProduct(String description) {
+        this.description = description;
     }
 
-    public String getName() {
-        return name;
+    public String getDescription() {
+        return description;
     }
 
     public static AwsProduct fromName(String name) {
         for (AwsProduct value : values()) {
-            if (value.name.equals(name)) {
+            if (value.name().equals(name)) {
                 return value;
             }
         }
