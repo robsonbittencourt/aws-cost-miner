@@ -1,6 +1,6 @@
 package com.rbittencourt.aws.cost.miner.domain.miner;
 
-import com.rbittencourt.aws.cost.miner.domain.awsservice.AwsServiceType;
+import com.rbittencourt.aws.cost.miner.domain.awsproduct.AwsProduct;
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfo;
 import com.rbittencourt.aws.cost.miner.domain.metric.Metric;
 import com.rbittencourt.aws.cost.miner.domain.metric.MetricResult;
@@ -8,12 +8,9 @@ import com.rbittencourt.aws.cost.miner.domain.metric.MetricsFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static java.math.RoundingMode.HALF_EVEN;
 
 @Component
 class AwsCostMinerImpl implements AwsCostMiner {
@@ -24,18 +21,13 @@ class AwsCostMinerImpl implements AwsCostMiner {
     @Autowired
     private MetricsFactory metricsFactory;
 
-    public List<MinedData> miningCostData(AwsServiceType serviceType) {
-        SearchParameters searchParameters = new SearchParameters()
-                .addFilter(b -> serviceType.getName().equals(b.getServiceName()))
-                .addFilter(b -> b.getCost().setScale(2, HALF_EVEN).compareTo(new BigDecimal("0.00")) > 0)
-                .addGrouper(b -> b.getCustomField("user:Name"));
-
+    public List<MinedData> miningCostData(AwsProduct serviceType, SearchParameters searchParameters) {
         Map<String, List<BillingInfo>> billingInfos = dataOrganizer.organizeData(searchParameters);
 
         return minedData(serviceType, billingInfos);
     }
 
-    private List<MinedData> minedData(AwsServiceType serviceType, Map<String, List<BillingInfo>> groupedBillingInfos) {
+    private List<MinedData> minedData(AwsProduct serviceType, Map<String, List<BillingInfo>> groupedBillingInfos) {
         List<MinedData> minedData = new ArrayList<>();
 
         for (Map.Entry<String, List<BillingInfo>> entry : groupedBillingInfos.entrySet()) {

@@ -15,12 +15,20 @@ import static java.util.stream.Collectors.groupingBy;
 public class BillingQuery {
 
     public final List<BillingInfo> filter(List<BillingInfo> lineInfos, List<Predicate<BillingInfo>> criteria) {
+        if (criteria == null || criteria.isEmpty()) {
+            return lineInfos;
+        }
+
         return lineInfos.parallelStream()
                 .filter(criteria.parallelStream().reduce(x -> true, Predicate::and))
                 .collect(Collectors.toList());
     }
 
     public Map<String, List<BillingInfo>> groupBy(List<BillingInfo> lineInfos, Function<BillingInfo, String> criterion) {
+        if (criterion == null) {
+            return Map.of("Without grouper", lineInfos);
+        }
+
         return lineInfos.parallelStream()
                 .collect(groupingBy(criterion));
     }

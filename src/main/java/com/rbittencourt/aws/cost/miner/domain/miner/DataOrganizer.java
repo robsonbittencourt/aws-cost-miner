@@ -26,6 +26,7 @@ class DataOrganizer {
     Map<String, List<BillingInfo>> organizeData(SearchParameters parameters) {
         List<BillingInfo> billingInfos = repository.findBillingInfos();
 
+        parameters.addFilter(b -> !b.getProductName().isEmpty() || b.getRecordType().equals("Rounding"));
         List<BillingInfo> filteredBillingInfos = billingQuery.filter(billingInfos, parameters.getFilters());
 
         Map<String, List<BillingInfo>> groupedBillingInfos = billingQuery.groupBy(filteredBillingInfos, parameters.getGroupBy());

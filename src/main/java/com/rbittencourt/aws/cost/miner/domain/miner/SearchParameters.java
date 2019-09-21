@@ -8,26 +8,26 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 
-class SearchParameters {
+public class SearchParameters {
 
     private List<Predicate<BillingInfo>> filters = new ArrayList<>();
     private Function<BillingInfo, String> groupBy;
 
-    SearchParameters addFilter(Predicate<BillingInfo> filter) {
+    public SearchParameters addFilter(Predicate<BillingInfo> filter) {
         this.filters.add(filter);
         return this;
     }
 
-    SearchParameters addGrouper(Function<BillingInfo, String> groupBy) {
+    public SearchParameters addGrouper(Function<BillingInfo, String> groupBy) {
         this.groupBy = groupBy;
         return this;
     }
 
-    List<Predicate<BillingInfo>> getFilters() {
+    public List<Predicate<BillingInfo>> getFilters() {
         return filters;
     }
 
-    Function<BillingInfo, String> getGroupBy() {
+    public Function<BillingInfo, String> getGroupBy() {
         return groupBy;
     }
 

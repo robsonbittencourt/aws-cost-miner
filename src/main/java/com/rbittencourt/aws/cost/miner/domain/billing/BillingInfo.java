@@ -9,13 +9,12 @@ import com.rbittencourt.aws.cost.miner.infrastructure.config.serialization.Local
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class BillingInfo {
 
     @JsonProperty("ProductName")
-    private String serviceName;
+    private String productName;
 
     @JsonProperty("UsageType")
     private String usageType;
@@ -38,27 +37,22 @@ public class BillingInfo {
     @JsonProperty("Cost")
     private BigDecimal cost;
 
+    @JsonProperty("RecordType")
+    private String recordType;
+
     private Map<String, String> otherFields = new LinkedHashMap<>();
 
     @JsonAnySetter
     void setOtherFields(String key, String value) {
-        if (!notMappedFields().contains(key)) {
-            otherFields.put(key, value);
-        }
+        otherFields.put(key, value);
     }
 
-    private List<String> notMappedFields() {
-        return List.of("InvoiceID", "PayerAccountId", "LinkedAccountId", "RecordType",
-                "RecordId", "RateId", "SubscriptionId", "PricingPlanId", "Operation",
-                "ItemDescription", "UsageQuantity", "Rate", "ResourceId");
+    public String getProductName() {
+        return productName;
     }
 
-    public String getServiceName() {
-        return serviceName;
-    }
-
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public String getUsageType() {
@@ -77,7 +71,7 @@ public class BillingInfo {
         this.availabilityZone = availabilityZone;
     }
 
-    public boolean isReservedInstance() {
+    public boolean getReservedInstance() {
         return reservedInstance;
     }
 
@@ -107,6 +101,14 @@ public class BillingInfo {
 
     public void setCost(BigDecimal cost) {
         this.cost = cost;
+    }
+
+    public String getRecordType() {
+        return recordType;
+    }
+
+    public void setRecordType(String recordType) {
+        this.recordType = recordType;
     }
 
     public String getCustomField(String customFieldName) {
