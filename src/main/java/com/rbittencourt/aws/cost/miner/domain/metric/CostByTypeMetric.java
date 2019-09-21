@@ -11,6 +11,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.reverseOrder;
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -34,6 +36,7 @@ class CostByTypeMetric implements Metric {
                     BigDecimal totalCost = billingQuery.totalCost(e.getValue());
                     return new MetricValue(e.getKey(), totalCost, new MoneyMaskedValue(totalCost));
                 })
+                .sorted(comparing(MetricValue::getValue, reverseOrder()))
                 .collect(toList());
 
         return new MetricResult(description(), metricValues);
