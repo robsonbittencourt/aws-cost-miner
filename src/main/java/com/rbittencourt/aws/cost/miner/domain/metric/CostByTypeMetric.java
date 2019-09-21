@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import static java.math.RoundingMode.HALF_EVEN;
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.reverseOrder;
 import static java.util.stream.Collectors.toList;
@@ -37,6 +38,7 @@ class CostByTypeMetric implements Metric {
                     BigDecimal totalCost = billingQuery.totalCost(e.getValue());
                     return new MetricValue(e.getKey(), totalCost, new MoneyMaskedValue(totalCost));
                 })
+                .filter(m -> m.getValue().setScale(2, HALF_EVEN).compareTo(new BigDecimal("0.00")) > 0)
                 .sorted(comparing(MetricValue::getValue, reverseOrder()))
                 .collect(toList());
 

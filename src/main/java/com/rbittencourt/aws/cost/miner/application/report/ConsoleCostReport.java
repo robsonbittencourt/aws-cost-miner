@@ -12,11 +12,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Function;
 
-import static java.math.RoundingMode.HALF_EVEN;
 import static org.springframework.util.StringUtils.isEmpty;
 
 @Component
@@ -39,8 +37,6 @@ public class ConsoleCostReport {
         if (awsProduct != null) {
             searchParameters.addFilter(b -> awsProduct.getName().equals(b.getProductName()));
         }
-
-        searchParameters.addFilter(b -> b.getCost().setScale(2, HALF_EVEN).compareTo(new BigDecimal("0.00")) > 0);
 
         if (groupBy != null) {
             searchParameters.addGrouper(buildGroupByClause());
