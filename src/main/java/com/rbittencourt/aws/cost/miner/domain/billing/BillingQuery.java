@@ -9,16 +9,14 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.groupingBy;
 
 @Component
 public class BillingQuery {
 
-    @SafeVarargs
-    public final List<BillingInfo> filter(List<BillingInfo> lineInfos, Predicate<BillingInfo> ...criteria) {
+    public final List<BillingInfo> filter(List<BillingInfo> lineInfos, List<Predicate<BillingInfo>> criteria) {
         return lineInfos.parallelStream()
-                .filter(stream(criteria).reduce(x -> true, Predicate::and))
+                .filter(criteria.parallelStream().reduce(x -> true, Predicate::and))
                 .collect(Collectors.toList());
     }
 
