@@ -5,7 +5,6 @@ plugins {
 }
 
 group = 'com.rbittencourt'
-version = '1.0.0'
 targetCompatibility = '12'
 sourceCompatibility = '12'
 
