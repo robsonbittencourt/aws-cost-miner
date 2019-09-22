@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Function;
 
+import static java.math.RoundingMode.HALF_EVEN;
 import static org.springframework.util.StringUtils.isEmpty;
 
 @Component
@@ -37,11 +39,15 @@ public class ConsoleCostReport {
         printTitle(awsProduct);
 
         for (MinedData data : minedData) {
-            printHeader(data);
+            BigDecimal totalCost = data.getMetricResult().get(0).getMetricValues().get(0).getValue().setScale(2, HALF_EVEN);
 
-            printMetricResult(data);
+            if (totalCost.compareTo(new BigDecimal("0.00")) > 0) {
+                printHeader(data);
 
-            blankLine("");
+                printMetricResult(data);
+
+                blankLine("");
+            }
         }
     }
 
