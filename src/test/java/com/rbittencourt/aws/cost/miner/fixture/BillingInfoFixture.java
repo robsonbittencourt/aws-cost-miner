@@ -3,6 +3,7 @@ package com.rbittencourt.aws.cost.miner.fixture;
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfo;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class BillingInfoFixture {
 
@@ -33,6 +34,11 @@ public class BillingInfoFixture {
 
     public BillingInfoFixture withUsageType(String usageType) {
         this.billingInfo.setUsageType(usageType);
+        return this;
+    }
+
+    public BillingInfoFixture withUsageStartDate(LocalDateTime usageStartDate) {
+        this.billingInfo.setUsageStartDate(usageStartDate);
         return this;
     }
 

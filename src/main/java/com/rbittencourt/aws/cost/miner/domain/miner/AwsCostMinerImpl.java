@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 class AwsCostMinerImpl implements AwsCostMiner {
@@ -31,17 +32,35 @@ class AwsCostMinerImpl implements AwsCostMiner {
         List<MinedData> minedData = new ArrayList<>();
 
         for (Map.Entry<String, List<BillingInfo>> entry : groupedBillingInfos.entrySet()) {
-            List<MetricResult> metricResults = new ArrayList<>();
-
-            for (Metric metric : metricsFactory.build(serviceType)) {
-                MetricResult metricResult = metric.calculateMetric(entry.getValue());
-                metricResults.add(metricResult);
-            }
-
+            List<MetricResult> metricResults = getMetricResults(serviceType, entry);
             minedData.add(new MinedData(entry.getKey(), metricResults));
         }
 
         return minedData;
+    }
+
+    private List<MetricResult> getMetricResults(AwsProduct serviceType, Map.Entry<String, List<BillingInfo>> entry) {
+        List<MetricResult> metricResults = new ArrayList<>();
+
+        for (Metric metric : metricsFactory.build(serviceType)) {
+            MetricResult metricResult = metric.calculateMetric(entry.getValue());
+            addInMetricResults(metricResults, metricResult);
+        }
+
+        return metricResults;
+    }
+
+    private void addInMetricResults(List<MetricResult> metricResults, MetricResult metricResult) {
+        Optional<MetricResult> existentMetricResult = metricResults.stream()
+                .filter(m -> m.getDescription().isPresent())
+                .filter(m -> m.getDescription().equals(metricResult.getDescription()))
+                .findFirst();
+
+        if (existentMetricResult.isPresent()) {
+            existentMetricResult.get().getMetricValues().addAll(metricResult.getMetricValues());
+        } else {
+            metricResults.add(metricResult);
+        }
     }
 
 }

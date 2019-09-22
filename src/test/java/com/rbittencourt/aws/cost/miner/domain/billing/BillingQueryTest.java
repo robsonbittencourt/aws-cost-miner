@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -125,6 +127,40 @@ public class BillingQueryTest {
         BigDecimal totalCost = billingQuery.totalCost(billingInfos);
 
         assertEquals(new BigDecimal(837), totalCost);
+    }
+
+    @Test
+    public void shouldReturnBillingInfosInTimePeriodBasedOnUsageStartDate() {
+        List<BillingInfo> billingInfos = new ArrayList<>();
+        billingInfos.add(BillingInfoFixture.get().withProductName("EC2").withUsageStartDate(LocalDateTime.of(2019, 9, 21, 10, 30)).build());
+        billingInfos.add(BillingInfoFixture.get().withProductName("EKS").withUsageStartDate(LocalDateTime.of(2019, 9, 21, 18, 0)).build());
+        billingInfos.add(BillingInfoFixture.get().withProductName("SQS").withUsageStartDate(LocalDateTime.of(2019, 9, 21, 12, 0)).build());
+        billingInfos.add(BillingInfoFixture.get().withProductName("RDS").withUsageStartDate(LocalDateTime.of(2019, 9, 21, 22, 0)).build());
+        billingInfos.add(BillingInfoFixture.get().withProductName("SNS").withUsageStartDate(LocalDateTime.of(2019, 9, 21, 15, 40)).build());
+
+        List<BillingInfo> result = billingQuery.betweenTimeRangeOfUsageStartDate(billingInfos, LocalTime.of(10, 30), LocalTime.of(16, 0));
+
+        assertEquals(3, result.size());
+        assertEquals("EC2", result.get(0).getProductName());
+        assertEquals("SQS", result.get(1).getProductName());
+        assertEquals("SNS", result.get(2).getProductName());
+    }
+
+    @Test
+    public void shouldReturnBillingInfosInTimePeriodWithinLeapDayBasedOnUsageStartDate() {
+        List<BillingInfo> billingInfos = new ArrayList<>();
+        billingInfos.add(BillingInfoFixture.get().withProductName("EC2").withUsageStartDate(LocalDateTime.of(2019, 9, 21, 19, 0)).build());
+        billingInfos.add(BillingInfoFixture.get().withProductName("EKS").withUsageStartDate(LocalDateTime.of(2019, 9, 21, 16, 0)).build());
+        billingInfos.add(BillingInfoFixture.get().withProductName("SQS").withUsageStartDate(LocalDateTime.of(2019, 9, 21, 23, 30)).build());
+        billingInfos.add(BillingInfoFixture.get().withProductName("RDS").withUsageStartDate(LocalDateTime.of(2019, 9, 22, 9, 0)).build());
+        billingInfos.add(BillingInfoFixture.get().withProductName("SNS").withUsageStartDate(LocalDateTime.of(2019, 9, 22, 6, 40)).build());
+
+        List<BillingInfo> result = billingQuery.betweenTimeRangeOfUsageStartDate(billingInfos, LocalTime.of(19, 0), LocalTime.of(7, 0));
+
+        assertEquals(3, result.size());
+        assertEquals("EC2", result.get(0).getProductName());
+        assertEquals("SQS", result.get(1).getProductName());
+        assertEquals("SNS", result.get(2).getProductName());
     }
 
 }

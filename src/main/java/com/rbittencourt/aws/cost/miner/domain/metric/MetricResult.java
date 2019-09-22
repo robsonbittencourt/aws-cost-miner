@@ -1,7 +1,10 @@
 package com.rbittencourt.aws.cost.miner.domain.metric;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.Arrays.asList;
 
 public class MetricResult {
 
@@ -10,12 +13,12 @@ public class MetricResult {
 
     public MetricResult(String description, MetricValue metricValue) {
         this.description = description;
-        this.metricValues = List.of(metricValue);
+        this.metricValues = asList(metricValue);
     }
 
     public MetricResult(String description, List<MetricValue> metricValues) {
         this.description = description;
-        this.metricValues = metricValues;
+        this.metricValues = new ArrayList<>(metricValues);
     }
 
     public Optional<String> getDescription() {
