@@ -37,7 +37,8 @@ public class CostInNightTimeTest {
         BillingInfo billingNight1= BillingInfoFixture.get().withUsageStartDate(of(2019, 9, 19, 20, 0)).withCost(75).build();
         BillingInfo billingNight2 = BillingInfoFixture.get().withUsageStartDate(of(2019, 9, 20, 21, 0)).withCost(75).build();
         BillingInfo billingNight3 = BillingInfoFixture.get().withUsageStartDate(of(2019, 9, 21, 22, 0)).withCost(150).build();
-        List<BillingInfo> billingInfos = List.of(billingDay1, billingDay2, billingNight1, billingNight2, billingNight3);
+        BillingInfo billingWithoutDate = BillingInfoFixture.get().withCost(23).build();
+        List<BillingInfo> billingInfos = List.of(billingDay1, billingDay2, billingNight1, billingNight2, billingNight3, billingWithoutDate);
 
         when(billingQuery.betweenTimeRangeOfUsageStartDate(billingInfos, LocalTime.of(19, 0), LocalTime.of(7, 0))).thenReturn(List.of(billingNight1, billingNight2, billingNight3));
         when(billingQuery.totalCost(List.of(billingNight1, billingNight2, billingNight3))).thenReturn(new BigDecimal(300));

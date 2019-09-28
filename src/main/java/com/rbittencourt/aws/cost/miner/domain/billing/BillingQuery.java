@@ -56,6 +56,7 @@ public class BillingQuery {
         }
 
         return billingInfos.stream()
+                .filter(b -> b.getUsageStartDate() != null)
                 .filter(criteria)
                 .collect(toList());
     }

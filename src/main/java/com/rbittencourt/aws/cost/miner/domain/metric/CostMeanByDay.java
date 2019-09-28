@@ -26,7 +26,11 @@ class CostMeanByDay implements Metric {
 
     @Override
     public MetricResult calculateMetric(List<BillingInfo> billingInfos) {
-        long daysQuantity = billingInfos.stream().map(b -> b.getUsageStartDate().toLocalDate()).distinct().count();
+        long daysQuantity = billingInfos.stream()
+                .filter(b -> b.getUsageStartDate() != null)
+                .map(b -> b.getUsageStartDate().toLocalDate())
+                .distinct()
+                .count();
 
         BigDecimal totalCost = billingQuery.totalCost(billingInfos);
         BigDecimal average = totalCost.divide(new BigDecimal(daysQuantity), HALF_EVEN);

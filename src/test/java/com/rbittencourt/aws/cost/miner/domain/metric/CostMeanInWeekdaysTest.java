@@ -38,7 +38,8 @@ public class CostMeanInWeekdaysTest {
         BillingInfo billingFriday = BillingInfoFixture.get().withUsageStartDate(of(2019, 9, 20, 8, 0)).withCost(20).build();
         BillingInfo billingSaturday = BillingInfoFixture.get().withUsageStartDate(of(2019, 9, 21, 8, 0)).withCost(43).build();
         BillingInfo billingSunday = BillingInfoFixture.get().withUsageStartDate(of(2019, 9, 22, 8, 0)).withCost(57).build();
-        List<BillingInfo> billingInfos = List.of(billingMonday, billingThursday, billingWednesday, billingTuesday, billingFriday, billingSaturday, billingSunday);
+        BillingInfo billingWithoutDate = BillingInfoFixture.get().withCost(23).build();
+        List<BillingInfo> billingInfos = List.of(billingMonday, billingThursday, billingWednesday, billingTuesday, billingFriday, billingSaturday, billingSunday, billingWithoutDate);
 
         when(billingQuery.totalCost(List.of(billingMonday, billingThursday, billingWednesday, billingTuesday, billingFriday))).thenReturn(new BigDecimal(100));
 

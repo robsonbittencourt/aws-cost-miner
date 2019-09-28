@@ -27,7 +27,12 @@ class CostInDayTime implements Metric {
 
     @Override
     public MetricResult calculateMetric(List<BillingInfo> billingInfos) {
-        long daysQuantity = billingInfos.stream().map(b -> b.getUsageStartDate().toLocalDate()).distinct().count();
+        long daysQuantity = billingInfos.stream()
+                .filter(b -> b.getUsageStartDate() != null)
+                .map(b -> b.getUsageStartDate().toLocalDate())
+                .distinct()
+                .count();
+
         List<BillingInfo> dayTimeBilling = billingQuery.betweenTimeRangeOfUsageStartDate(billingInfos, LocalTime.of(7, 0), LocalTime.of(19, 0));
 
         BigDecimal totalCost = billingQuery.totalCost(dayTimeBilling);

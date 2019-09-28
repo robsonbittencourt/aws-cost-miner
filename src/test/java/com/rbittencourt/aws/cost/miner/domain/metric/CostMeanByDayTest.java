@@ -39,7 +39,8 @@ public class CostMeanByDayTest {
         BillingInfo billingFriday = BillingInfoFixture.get().withUsageStartDate(of(2019, 9, 20, 8, 0)).withCost(75).build();
         BillingInfo billingSaturday = BillingInfoFixture.get().withUsageStartDate(of(2019, 9, 21, 8, 0)).withCost(50).build();
         BillingInfo billingSunday = BillingInfoFixture.get().withUsageStartDate(of(2019, 9, 22, 8, 0)).withCost(75).build();
-        List<BillingInfo> billingInfos = List.of(billingMonday, billingThursday, billingWednesday, billingTuesday, billingFriday, billingSaturday, billingSunday);
+        BillingInfo billingWithoutDate = BillingInfoFixture.get().withCost(23).build();
+        List<BillingInfo> billingInfos = List.of(billingMonday, billingThursday, billingWednesday, billingTuesday, billingFriday, billingSaturday, billingSunday, billingWithoutDate);
 
         when(billingQuery.totalCost(billingInfos)).thenReturn(new BigDecimal(700));
 

@@ -31,8 +31,15 @@ class CostMeanInWeekdays implements Metric {
 
     @Override
     public MetricResult calculateMetric(List<BillingInfo> billingInfos) {
-        List<BillingInfo> weekdayBillings = billingInfos.stream().filter(b -> b.getUsageStartDate().query(IS_WEEKDAY_QUERY)).collect(toList());
-        long weekdayDaysQuantity = weekdayBillings.stream().map(b -> b.getUsageStartDate().toLocalDate()).distinct().count();
+        List<BillingInfo> weekdayBillings = billingInfos.stream()
+                .filter(b -> b.getUsageStartDate() != null)
+                .filter(b -> b.getUsageStartDate().query(IS_WEEKDAY_QUERY))
+                .collect(toList());
+
+        long weekdayDaysQuantity = weekdayBillings.stream()
+                .map(b -> b.getUsageStartDate().toLocalDate())
+                .distinct()
+                .count();
 
         BigDecimal totalCost = billingQuery.totalCost(weekdayBillings);
         BigDecimal average = weekdayDaysQuantity != 0 ? totalCost.divide(new BigDecimal(weekdayDaysQuantity), HALF_EVEN) : totalCost;

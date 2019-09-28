@@ -137,6 +137,7 @@ public class BillingQueryTest {
         billingInfos.add(BillingInfoFixture.get().withProductName("SQS").withUsageStartDate(LocalDateTime.of(2019, 9, 21, 12, 0)).build());
         billingInfos.add(BillingInfoFixture.get().withProductName("RDS").withUsageStartDate(LocalDateTime.of(2019, 9, 21, 22, 0)).build());
         billingInfos.add(BillingInfoFixture.get().withProductName("SNS").withUsageStartDate(LocalDateTime.of(2019, 9, 21, 15, 40)).build());
+        billingInfos.add(BillingInfoFixture.get().build());
 
         List<BillingInfo> result = billingQuery.betweenTimeRangeOfUsageStartDate(billingInfos, LocalTime.of(10, 30), LocalTime.of(16, 0));
 

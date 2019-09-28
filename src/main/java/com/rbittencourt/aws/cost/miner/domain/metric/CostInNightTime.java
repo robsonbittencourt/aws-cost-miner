@@ -27,7 +27,12 @@ class CostInNightTime implements Metric {
 
     @Override
     public MetricResult calculateMetric(List<BillingInfo> billingInfos) {
-        long daysQuantity = billingInfos.stream().map(b -> b.getUsageStartDate().toLocalDate()).distinct().count();
+        long daysQuantity = billingInfos.stream()
+                .filter(b -> b.getUsageStartDate() != null)
+                .map(b -> b.getUsageStartDate().toLocalDate())
+                .distinct()
+                .count();
+
         List<BillingInfo> nightTimeBilling = billingQuery.betweenTimeRangeOfUsageStartDate(billingInfos, LocalTime.of(19, 0), LocalTime.of(7, 0));
 
         BigDecimal totalCost = billingQuery.totalCost(nightTimeBilling);
