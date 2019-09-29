@@ -1,18 +1,17 @@
 package com.rbittencourt.aws.cost.miner.domain.miner;
 
-import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfo;
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfoRepository;
-import com.rbittencourt.aws.cost.miner.domain.billing.BillingQuery;
+import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.reverseOrder;
 import static java.util.stream.Collectors.toMap;
+import static org.springframework.util.StringUtils.isEmpty;
 
 @Component
 class DataOrganizer {
@@ -22,23 +21,20 @@ class DataOrganizer {
     @Autowired
     private BillingInfoRepository repository;
 
-    @Autowired
-    private BillingQuery billingQuery;
+    Map<String, BillingInfos> organizeData(SearchParameters parameters) {
+        BillingInfos billingInfos = repository.findBillingInfos();
 
-    Map<String, List<BillingInfo>> organizeData(SearchParameters parameters) {
-        List<BillingInfo> billingInfos = repository.findBillingInfos();
+        parameters.addFilter(b -> !isEmpty(b.getProductName()) || ROUNDING.equals(b.getRecordType()));
+        BillingInfos filteredBillingInfos = billingInfos.filter(parameters.getFilters());
 
-        parameters.addFilter(b -> !b.getProductName().isEmpty() || b.getRecordType().equals(ROUNDING));
-        List<BillingInfo> filteredBillingInfos = billingQuery.filter(billingInfos, parameters.getFilters());
-
-        Map<String, List<BillingInfo>> groupedBillingInfos = billingQuery.groupBy(filteredBillingInfos, parameters.getGroupBy());
+        Map<String, BillingInfos> groupedBillingInfos = filteredBillingInfos.groupBy(parameters.getGroupBy());
 
         return sort(groupedBillingInfos);
     }
 
-    private Map<String, List<BillingInfo>> sort(Map<String, List<BillingInfo>> groupedBillingInfos) {
+    private Map<String, BillingInfos> sort(Map<String, BillingInfos> groupedBillingInfos) {
         return groupedBillingInfos.entrySet().parallelStream()
-                .sorted(comparing(v -> billingQuery.totalCost(v.getValue()), reverseOrder()))
+                .sorted(comparing(v -> v.getValue().totalCost(), reverseOrder()))
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 

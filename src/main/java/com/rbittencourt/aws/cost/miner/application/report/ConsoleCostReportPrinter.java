@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static java.math.RoundingMode.HALF_EVEN;
+import static org.springframework.util.CollectionUtils.isEmpty;
 import static org.springframework.util.StringUtils.isEmpty;
 
 @Component
@@ -52,6 +53,10 @@ public class ConsoleCostReportPrinter {
 
     private void printMetricResult(MinedData data) {
         for (MetricResult metricResult : data.getMetricResult()) {
+            if (isEmpty(metricResult.getMetricValues())) {
+                continue;
+            }
+
             boolean indent = false;
             if (metricResult.getDescription().isPresent()) {
                 System.out.println(metricResult.getDescription().get());

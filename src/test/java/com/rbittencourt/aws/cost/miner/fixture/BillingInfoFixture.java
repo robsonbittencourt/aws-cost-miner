@@ -22,6 +22,11 @@ public class BillingInfoFixture {
         return this;
     }
 
+    public BillingInfoFixture ec2() {
+        this.billingInfo.setProductName("Amazon Elastic Compute Cloud");
+        return this;
+    }
+
     public BillingInfoFixture withAvailabilityZone(String availabilityZone) {
         this.billingInfo.setAvailabilityZone(availabilityZone);
         return this;
@@ -39,6 +44,21 @@ public class BillingInfoFixture {
 
     public BillingInfoFixture withUsageStartDate(LocalDateTime usageStartDate) {
         this.billingInfo.setUsageStartDate(usageStartDate);
+        return this;
+    }
+
+    public BillingInfoFixture reservedInstance() {
+        this.billingInfo.setReservedInstance(true);
+        return this;
+    }
+
+    public BillingInfoFixture spotInstance() {
+        this.billingInfo.setItemDescription("Spot Instance-hour");
+        return this;
+    }
+
+    public BillingInfoFixture onDemand() {
+        this.billingInfo.setItemDescription("On Demand");
         return this;
     }
 

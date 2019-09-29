@@ -4,8 +4,9 @@ import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfoRepository;
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfo;
+import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfoRepository;
+import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -29,7 +30,7 @@ public class BillingInfoCsvRepository implements BillingInfoRepository {
     private String userDir = System.getProperty("user.dir") + "/data.csv";
 
     @Override
-    public List<BillingInfo> findBillingInfos() {
+    public BillingInfos findBillingInfos() {
         ObjectReader objectReader = csvMapper.readerFor(BillingInfo.class).with(csvSchema);
 
         List<BillingInfo> billingInfos = new ArrayList<>();
@@ -41,9 +42,9 @@ public class BillingInfoCsvRepository implements BillingInfoRepository {
                 billingInfos.add(iterator.next());
             }
 
-            return billingInfos;
+            return new BillingInfos(billingInfos);
         } catch (IOException e) {
-            return new ArrayList<>();
+            return new BillingInfos(new ArrayList<>());
         }
     }
 

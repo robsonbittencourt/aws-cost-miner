@@ -1,28 +1,23 @@
 package com.rbittencourt.aws.cost.miner.domain.metric;
 
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfo;
-import com.rbittencourt.aws.cost.miner.domain.billing.BillingQuery;
+import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfos;
 import com.rbittencourt.aws.cost.miner.fixture.BillingInfoFixture;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 import static java.time.LocalDateTime.of;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class CostMeanInWeekendDaysTest {
 
     @InjectMocks
     private CostMeanInWeekendDays metric;
-
-    @Mock
-    private BillingQuery billingQuery;
 
     @Before
     public void setup() {
@@ -39,9 +34,7 @@ public class CostMeanInWeekendDaysTest {
         BillingInfo billingSaturday = BillingInfoFixture.get().withUsageStartDate(of(2019, 9, 21, 8, 0)).withCost(150).build();
         BillingInfo billingSunday = BillingInfoFixture.get().withUsageStartDate(of(2019, 9, 22, 8, 0)).withCost(50).build();
         BillingInfo billingWithoutDate = BillingInfoFixture.get().withCost(23).build();
-        List<BillingInfo> billingInfos = List.of(billingMonday, billingThursday, billingWednesday, billingTuesday, billingFriday, billingSaturday, billingSunday, billingWithoutDate);
-
-        when(billingQuery.totalCost(List.of(billingSaturday, billingSunday))).thenReturn(new BigDecimal(200));
+        BillingInfos billingInfos = new BillingInfos(List.of(billingMonday, billingThursday, billingWednesday, billingTuesday, billingFriday, billingSaturday, billingSunday, billingWithoutDate));
 
         MetricResult metricResult = metric.calculateMetric(billingInfos);
 
@@ -60,9 +53,7 @@ public class CostMeanInWeekendDaysTest {
         BillingInfo billingWednesday = BillingInfoFixture.get().withUsageStartDate(of(2019, 9, 18, 8, 0)).withCost(19).build();
         BillingInfo billingTuesday = BillingInfoFixture.get().withUsageStartDate(of(2019, 9, 19, 8, 0)).withCost(36).build();
         BillingInfo billingFriday = BillingInfoFixture.get().withUsageStartDate(of(2019, 9, 20, 8, 0)).withCost(43).build();
-        List<BillingInfo> billingInfos = List.of(billingMonday, billingThursday, billingWednesday, billingTuesday, billingFriday);
-
-        when(billingQuery.totalCost(List.of())).thenReturn(BigDecimal.ZERO);
+        BillingInfos billingInfos = new BillingInfos(List.of(billingMonday, billingThursday, billingWednesday, billingTuesday, billingFriday));
 
         MetricResult metricResult = metric.calculateMetric(billingInfos);
 

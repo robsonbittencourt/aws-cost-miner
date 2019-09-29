@@ -26,6 +26,9 @@ public class BillingInfo {
     @JsonProperty("ReservedInstance")
     private boolean reservedInstance;
 
+    @JsonProperty("ItemDescription")
+    private String itemDescription;
+
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonProperty("UsageStartDate")
     private LocalDateTime usageStartDate;
@@ -75,6 +78,14 @@ public class BillingInfo {
         return reservedInstance;
     }
 
+    public String getItemDescription() {
+        return itemDescription;
+    }
+
+    public void setItemDescription(String itemDescription) {
+        this.itemDescription = itemDescription;
+    }
+
     public void setReservedInstance(boolean reservedInstance) {
         this.reservedInstance = reservedInstance;
     }
@@ -113,6 +124,30 @@ public class BillingInfo {
 
     public String getCustomField(String customFieldName) {
         return otherFields.get(customFieldName);
+    }
+
+    public boolean getSpotInstance() {
+        return itemDescription!= null && itemDescription.contains("Spot Instance");
+    }
+
+    public boolean getOnDemand() {
+        return itemDescription != null && itemDescription.contains("On Demand");
+    }
+
+    public boolean isEC2Instance() {
+        return usageType != null && (usageType.contains("BoxUsage") || usageType.contains("SpotUsage"));
+    }
+
+    public String ec2InstanceFamily() {
+        try {
+            return usageType.substring(usageType.lastIndexOf(":") + 1);
+        } catch (Exception e) {
+            return "m1.small"; //TODO
+        }
+    }
+
+    public EC2PricingModel ec2PricingModel() {
+        return EC2PricingModel.byBillingInfo(this);
     }
 
 }

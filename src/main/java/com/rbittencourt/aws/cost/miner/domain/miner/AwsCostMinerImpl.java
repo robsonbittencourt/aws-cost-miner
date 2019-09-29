@@ -1,7 +1,7 @@
 package com.rbittencourt.aws.cost.miner.domain.miner;
 
 import com.rbittencourt.aws.cost.miner.domain.awsproduct.AwsProduct;
-import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfo;
+import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfos;
 import com.rbittencourt.aws.cost.miner.domain.metric.Metric;
 import com.rbittencourt.aws.cost.miner.domain.metric.MetricResult;
 import com.rbittencourt.aws.cost.miner.domain.metric.MetricsFactory;
@@ -23,15 +23,15 @@ class AwsCostMinerImpl implements AwsCostMiner {
     private MetricsFactory metricsFactory;
 
     public List<MinedData> miningCostData(AwsProduct serviceType, SearchParameters searchParameters) {
-        Map<String, List<BillingInfo>> billingInfos = dataOrganizer.organizeData(searchParameters);
+        Map<String, BillingInfos> billingInfos = dataOrganizer.organizeData(searchParameters);
 
         return minedData(serviceType, billingInfos);
     }
 
-    private List<MinedData> minedData(AwsProduct serviceType, Map<String, List<BillingInfo>> groupedBillingInfos) {
+    private List<MinedData> minedData(AwsProduct serviceType, Map<String, BillingInfos> groupedBillingInfos) {
         List<MinedData> minedData = new ArrayList<>();
 
-        for (Map.Entry<String, List<BillingInfo>> entry : groupedBillingInfos.entrySet()) {
+        for (Map.Entry<String, BillingInfos> entry : groupedBillingInfos.entrySet()) {
             List<MetricResult> metricResults = getMetricResults(serviceType, entry);
             minedData.add(new MinedData(entry.getKey(), metricResults));
         }
@@ -39,7 +39,7 @@ class AwsCostMinerImpl implements AwsCostMiner {
         return minedData;
     }
 
-    private List<MetricResult> getMetricResults(AwsProduct serviceType, Map.Entry<String, List<BillingInfo>> entry) {
+    private List<MetricResult> getMetricResults(AwsProduct serviceType, Map.Entry<String, BillingInfos> entry) {
         List<MetricResult> metricResults = new ArrayList<>();
 
         for (Metric metric : metricsFactory.build(serviceType)) {

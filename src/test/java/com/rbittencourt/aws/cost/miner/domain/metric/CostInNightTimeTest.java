@@ -1,29 +1,23 @@
 package com.rbittencourt.aws.cost.miner.domain.metric;
 
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfo;
-import com.rbittencourt.aws.cost.miner.domain.billing.BillingQuery;
+import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfos;
 import com.rbittencourt.aws.cost.miner.fixture.BillingInfoFixture;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 
 import java.math.BigDecimal;
-import java.time.LocalTime;
 import java.util.List;
 
 import static java.time.LocalDateTime.of;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class CostInNightTimeTest {
 
     @InjectMocks
     private CostInNightTime metric;
-
-    @Mock
-    private BillingQuery billingQuery;
 
     @Before
     public void setup() {
@@ -38,10 +32,7 @@ public class CostInNightTimeTest {
         BillingInfo billingNight2 = BillingInfoFixture.get().withUsageStartDate(of(2019, 9, 20, 21, 0)).withCost(75).build();
         BillingInfo billingNight3 = BillingInfoFixture.get().withUsageStartDate(of(2019, 9, 21, 22, 0)).withCost(150).build();
         BillingInfo billingWithoutDate = BillingInfoFixture.get().withCost(23).build();
-        List<BillingInfo> billingInfos = List.of(billingDay1, billingDay2, billingNight1, billingNight2, billingNight3, billingWithoutDate);
-
-        when(billingQuery.betweenTimeRangeOfUsageStartDate(billingInfos, LocalTime.of(19, 0), LocalTime.of(7, 0))).thenReturn(List.of(billingNight1, billingNight2, billingNight3));
-        when(billingQuery.totalCost(List.of(billingNight1, billingNight2, billingNight3))).thenReturn(new BigDecimal(300));
+        BillingInfos billingInfos = new BillingInfos(List.of(billingDay1, billingDay2, billingNight1, billingNight2, billingNight3, billingWithoutDate));
 
         MetricResult metricResult = metric.calculateMetric(billingInfos);
 

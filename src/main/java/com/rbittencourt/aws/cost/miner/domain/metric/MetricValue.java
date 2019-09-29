@@ -8,12 +8,18 @@ public class MetricValue {
 
     private String description;
     private BigDecimal value;
-    private MaskedValue maskedValue;
+    private String formattedValue;
 
     public MetricValue(String description, BigDecimal value, MaskedValue maskedValue) {
         this.description = description;
         this.value = value;
-        this.maskedValue = maskedValue;
+        this.formattedValue = maskedValue.getMaskedValue();
+    }
+
+    public MetricValue(String description, BigDecimal value, String formattedValue) {
+        this.description = description;
+        this.value = value;
+        this.formattedValue = formattedValue;
     }
 
     public String getDescription() {
@@ -25,12 +31,12 @@ public class MetricValue {
     }
 
     public String getFormattedValue() {
-        return maskedValue.getMaskedValue();
+        return formattedValue;
     }
 
     @Override
     public String toString() {
-        return description + ": " + maskedValue.getMaskedValue();
+        return description + ": " + formattedValue;
     }
 
 }
