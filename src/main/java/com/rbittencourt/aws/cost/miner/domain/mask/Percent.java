@@ -2,15 +2,13 @@ package com.rbittencourt.aws.cost.miner.domain.mask;
 
 import java.math.BigDecimal;
 
-import static java.math.RoundingMode.HALF_EVEN;
+public class Percent implements MaskedValue {
 
-public class MoneyMaskedValue implements MaskedValue {
-
-    private static final String DOLLAR = "$";
+    private static final String PERCENT = "%";
 
     private BigDecimal value;
 
-    public MoneyMaskedValue(BigDecimal value) {
+    public Percent(BigDecimal value) {
         this.value = value;
     }
 
@@ -20,7 +18,12 @@ public class MoneyMaskedValue implements MaskedValue {
             return "";
         }
 
-        return DOLLAR + value.setScale(2, HALF_EVEN).toString();
+        return value.setScale(2) + PERCENT;
+    }
+
+    @Override
+    public String toString() {
+        return getMaskedValue();
     }
 
 }

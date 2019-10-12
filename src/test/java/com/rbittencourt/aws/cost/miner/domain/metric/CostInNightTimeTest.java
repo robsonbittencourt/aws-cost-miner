@@ -41,7 +41,7 @@ public class CostInNightTimeTest {
         assertEquals(new BigDecimal(60), metricValue.getValue());
         assertEquals("$60.00", metricValue.getFormattedValue());
 
-        assertEquals("Daily Metrics", metricResult.getDescription().get());
+        assertEquals("Daily Metrics", metricResult.getMetricName().get());
     }
 
 }

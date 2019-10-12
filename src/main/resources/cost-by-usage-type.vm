@@ -1,0 +1,10 @@
+ #set($metricValues = $data.metricResult.get(1).metricValues)
+ #if(!$metricValues.isEmpty())
+ ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+ │$StringUtils.center("Cost by Usage Type", 96)│
+ ├────────────────────────────────────────────────────────────────────────────┬───────────────────┤
+ #foreach($value in $data.metricResult.get(1).metricValues)
+ │ $StringUtils.rightPad($value.description, 74) │$StringUtils.leftPad($value.formattedValue, 18) │
+ #end
+ └────────────────────────────────────────────────────────────────────────────┴───────────────────┘
+ #end

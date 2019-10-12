@@ -1,7 +1,7 @@
 package com.rbittencourt.aws.cost.miner.domain.metric;
 
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfos;
-import com.rbittencourt.aws.cost.miner.domain.mask.MoneyMaskedValue;
+import com.rbittencourt.aws.cost.miner.domain.mask.Money;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +33,7 @@ class CostInDayTime implements Metric {
         BigDecimal totalCost = dayTimeBilling.totalCost();
         BigDecimal average = totalCost.divide(new BigDecimal(daysQuantity), HALF_EVEN);
 
-        MetricValue metricValue = new MetricValue("Cost mean by day period 07:00 to 19:00", average, new MoneyMaskedValue(average));
+        MetricValue metricValue = new MetricValue("Cost mean by day period 07:00 to 19:00", average, new Money(average));
 
         return new MetricResult(description(), List.of(metricValue));
     }

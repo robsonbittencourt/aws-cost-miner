@@ -1,0 +1,28 @@
+ #set($columnsQuantity = 6)
+ #set($instanceTypeIndex = $columnsQuantity)
+ #set($metricValues = $data.metricResult.get(3).metricValues)
+ #if(!$metricValues.isEmpty())
+ ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+ │$StringUtils.center("Cost By Instance Type", 96)│
+ ├────────────────┬───────────────────┬─────────────────┬───────────┬─────────────────┬───────────┤
+ │ Instance Type  │  Pricing Model    │      Hour       │   Hour %  │       Cost      │   Cost %  │
+ ├────────────────┼───────────────────┼─────────────────┼───────────┼─────────────────┼───────────┤
+ #foreach($values in $metricValues)
+   #if(($foreach.count + 1) % $columnsQuantity == 0)
+     #set($instanceType = $metricValues.get($foreach.count - 5).formattedValue)
+     #if(($foreach.count + 1) != $instanceTypeIndex)
+        #set($instanceType = "")
+     #else
+        #set($instanceTypeIndex = $instanceTypeIndex + ($columnsQuantity * 4))
+     #end
+ │ $StringUtils.rightPad($instanceType, 14) | $StringUtils.rightPad($metricValues.get($foreach.count - 4).formattedValue, 17) | $StringUtils.leftPad($metricValues.get($foreach.count - 3).formattedValue, 15) | $StringUtils.leftPad($metricValues.get($foreach.count - 2).formattedValue, 9) | $StringUtils.leftPad($metricValues.get($foreach.count - 1).formattedValue, 15) | $StringUtils.leftPad($metricValues.get($foreach.count).formattedValue, 9) |
+   #end
+   #if(($foreach.count + 1) % ($columnsQuantity * 4) == 0)
+     #if($foreach.count + 1 < $metricValues.size())
+ ├────────────────┼───────────────────┼─────────────────┼───────────┼─────────────────┼───────────┤
+     #else
+ └────────────────┴───────────────────┴─────────────────┴───────────┴─────────────────┴───────────┘
+     #end
+   #end
+ #end
+ #end

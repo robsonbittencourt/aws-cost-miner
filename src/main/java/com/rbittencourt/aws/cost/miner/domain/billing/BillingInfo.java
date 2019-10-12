@@ -19,6 +19,9 @@ public class BillingInfo {
     @JsonProperty("UsageType")
     private String usageType;
 
+    @JsonProperty("SubscriptionId")
+    private String subscriptionId;
+
     @JsonProperty("AvailabilityZone")
     private String availabilityZone;
 
@@ -37,6 +40,9 @@ public class BillingInfo {
     @JsonProperty("UsageEndDate")
     private LocalDateTime usageEndDate;
 
+    @JsonProperty("UsageQuantity")
+    private BigDecimal usedHours;
+
     @JsonProperty("Cost")
     private BigDecimal cost;
 
@@ -44,6 +50,8 @@ public class BillingInfo {
     private String recordType;
 
     private Map<String, String> otherFields = new LinkedHashMap<>();
+
+    private ReservedInstanceInfos reservedInstances;
 
     @JsonAnySetter
     void setOtherFields(String key, String value) {
@@ -64,6 +72,14 @@ public class BillingInfo {
 
     public void setUsageType(String usageType) {
         this.usageType = usageType;
+    }
+
+    public String getSubscriptionId() {
+        return subscriptionId;
+    }
+
+    public void setSubscriptionId(String subscriptionId) {
+        this.subscriptionId = subscriptionId;
     }
 
     public String getAvailabilityZone() {
@@ -106,7 +122,19 @@ public class BillingInfo {
         this.usageEndDate = usageEndDate;
     }
 
+    public BigDecimal getUsedHours() {
+        return usedHours;
+    }
+
+    public void setUsedHours(BigDecimal usedHours) {
+        this.usedHours = usedHours;
+    }
+
     public BigDecimal getCost() {
+        if (getReservedInstance()) {
+            return reservedInstances.hourCost(subscriptionId, instanceSize()).multiply(usedHours);
+        }
+
         return cost;
     }
 
@@ -120,6 +148,10 @@ public class BillingInfo {
 
     public void setRecordType(String recordType) {
         this.recordType = recordType;
+    }
+
+    public void setReservedInstances(ReservedInstanceInfos reservedInstances) {
+        this.reservedInstances = reservedInstances;
     }
 
     public String getCustomField(String customFieldName) {
@@ -138,12 +170,17 @@ public class BillingInfo {
         return usageType != null && (usageType.contains("BoxUsage") || usageType.contains("SpotUsage"));
     }
 
-    public String ec2InstanceFamily() {
-        try {
+    public String ec2InstanceType() {
+        if (usageType.equals("BoxUsage")) {
+            return "m1.small"; //for some reason AWS doesn't follow the pattern with this instance type
+        } else  {
             return usageType.substring(usageType.lastIndexOf(":") + 1);
-        } catch (Exception e) {
-            return "m1.small"; //TODO
         }
+    }
+
+    public InstanceSize instanceSize() {
+        String instanceSize = usageType.substring(usageType.lastIndexOf(".") + 1);
+        return InstanceSize.fromDescription(instanceSize);
     }
 
     public EC2PricingModel ec2PricingModel() {

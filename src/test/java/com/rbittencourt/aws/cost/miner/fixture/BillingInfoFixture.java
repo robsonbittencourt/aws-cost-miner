@@ -27,6 +27,11 @@ public class BillingInfoFixture {
         return this;
     }
 
+    public BillingInfoFixture withInstanceType(String instanceType) {
+        this.billingInfo.setUsageType("BoxUsage:" + instanceType);
+        return this;
+    }
+
     public BillingInfoFixture withAvailabilityZone(String availabilityZone) {
         this.billingInfo.setAvailabilityZone(availabilityZone);
         return this;
@@ -34,6 +39,11 @@ public class BillingInfoFixture {
 
     public BillingInfoFixture withCost(double cost) {
         this.billingInfo.setCost(new BigDecimal(cost));
+        return this;
+    }
+
+    public BillingInfoFixture withUsedHours(double usedHours) {
+        this.billingInfo.setUsedHours(new BigDecimal(usedHours));
         return this;
     }
 
