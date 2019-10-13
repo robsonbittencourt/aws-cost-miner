@@ -1,7 +1,7 @@
 package com.rbittencourt.aws.cost.miner.domain.metric;
 
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfos;
-import com.rbittencourt.aws.cost.miner.domain.mask.MoneyMaskedValue;
+import com.rbittencourt.aws.cost.miner.domain.mask.Money;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +19,7 @@ class TotalCostMetric implements Metric {
     public MetricResult calculateMetric(BillingInfos billingInfos) {
         BigDecimal totalCost = billingInfos.totalCost();
 
-        MetricValue metricValue = new MetricValue("Total cost", totalCost, new MoneyMaskedValue(totalCost));
+        MetricValue metricValue = new MetricValue("Total cost", totalCost, new Money(totalCost));
 
         return new MetricResult(description(), metricValue);
     }

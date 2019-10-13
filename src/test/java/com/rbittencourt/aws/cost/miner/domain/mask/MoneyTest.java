@@ -6,13 +6,13 @@ import java.math.BigDecimal;
 
 import static org.junit.Assert.assertEquals;
 
-public class MoneyMaskedValueTest {
+public class MoneyTest {
 
     @Test
     public void shouldMaskValueWithDollarMask() {
         BigDecimal value = new BigDecimal(200);
 
-        String maskedValue = new MoneyMaskedValue(value).getMaskedValue();
+        String maskedValue = new Money(value).getMaskedValue();
 
         assertEquals("$200.00", maskedValue);
     }
@@ -21,7 +21,7 @@ public class MoneyMaskedValueTest {
     public void shouldReturnEmptyStringWhenValueIsNull() {
         BigDecimal value = null;
 
-        String maskedValue = new MoneyMaskedValue(value).getMaskedValue();
+        String maskedValue = new Money(value).getMaskedValue();
 
         assertEquals("", maskedValue);
     }

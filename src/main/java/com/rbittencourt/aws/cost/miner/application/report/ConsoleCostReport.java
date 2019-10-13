@@ -5,12 +5,14 @@ import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfo;
 import com.rbittencourt.aws.cost.miner.domain.miner.AwsCostMiner;
 import com.rbittencourt.aws.cost.miner.domain.miner.MinedData;
 import com.rbittencourt.aws.cost.miner.domain.miner.SearchParameters;
+import com.rbittencourt.aws.cost.miner.infrastructure.file.TemplateWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 @Component
@@ -20,7 +22,7 @@ public class ConsoleCostReport {
     private AwsCostMiner miner;
 
     @Autowired
-    private ConsoleCostReportPrinter printer;
+    private TemplateWriter templateWriter;
 
     @Value("${product:#{null}}")
     private String product;
@@ -33,7 +35,8 @@ public class ConsoleCostReport {
         SearchParameters searchParameters = buildSearchParameters(awsProduct);
         List<MinedData> minedData = miner.miningCostData(awsProduct, searchParameters);
 
-        printer.printReport(minedData);
+        String output = templateWriter.write("ec2Report.vm", Map.of("minedData", minedData));
+        System.out.println(output);
     }
 
     private SearchParameters buildSearchParameters(AwsProduct awsProduct) {

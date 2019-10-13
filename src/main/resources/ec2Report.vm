@@ -1,0 +1,11 @@
+#foreach($data in $minedData)
+#set($target = "#if(!$data.target)Without group#{else}$data.target#end")
+
+ ╔════════════════════════════════════════════════════════════════════════════════════════════════╗
+ ║$StringUtils.center($target, 96)║
+ ╚════════════════════════════════════════════════════════════════════════════════════════════════╝
+ #parse("total-cost.vm")
+ #parse("cost-by-usage-type.vm")
+ #parse("daily-metrics.vm")
+ #parse("cost-by-instance-type.vm")
+#end

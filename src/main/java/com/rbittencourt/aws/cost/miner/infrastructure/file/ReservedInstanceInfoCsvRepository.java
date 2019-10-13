@@ -17,7 +17,7 @@ import java.util.List;
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 
 @Repository
-public class BillingInfoCsvRepository implements BillingInfoRepository {
+public class ReservedInstanceInfoCsvRepository implements ReservedInstanceInfoRepository {
 
     @Autowired
     private CsvMapper csvMapper;
@@ -25,34 +25,30 @@ public class BillingInfoCsvRepository implements BillingInfoRepository {
     @Autowired
     private CsvSchema csvSchema;
 
-    @Autowired
-    private ReservedInstanceInfoRepository reservedInstanceInfoRepository;
-
     private String userDir = System.getProperty("user.dir") + "/data.csv";
 
     @Override
-    public BillingInfos findBillingInfos() {
-        ObjectReader objectReader = csvMapper.readerFor(BillingInfo.class).with(csvSchema);
+    public ReservedInstanceInfos findReservedInstanceInfos() {
+        ObjectReader objectReader = csvMapper.readerFor(ReservedInstanceInfo.class).with(csvSchema);
 
-        List<BillingInfo> billingInfos = new ArrayList<>();
-
-        ReservedInstanceInfos reservedInstanceInfos = reservedInstanceInfoRepository.findReservedInstanceInfos();
+        List<ReservedInstanceInfo> reservedInstanceInfos = new ArrayList<>();
 
         try (Reader reader = new FileReader(userDir, ISO_8859_1)) {
-            MappingIterator<BillingInfo> iterator = objectReader.readValues(reader);
+            MappingIterator<ReservedInstanceInfo> iterator = objectReader.readValues(reader);
 
             while (iterator.hasNext()) {
-                BillingInfo billingInfo = iterator.next();
+                ReservedInstanceInfo info = iterator.next();
 
-                if (!billingInfo.getUsageType().contains("HeavyUsage")) {
-                    billingInfo.setReservedInstances(reservedInstanceInfos);
-                    billingInfos.add(billingInfo);
+                if (info.getUsageType().contains("HeavyUsage")) {
+                    reservedInstanceInfos.add(info);
+                } else {
+                    break;
                 }
             }
 
-            return new BillingInfos(billingInfos);
+            return new ReservedInstanceInfos(reservedInstanceInfos);
         } catch (IOException e) {
-            return new BillingInfos(new ArrayList<>());
+            return new ReservedInstanceInfos(new ArrayList<>());
         }
     }
 

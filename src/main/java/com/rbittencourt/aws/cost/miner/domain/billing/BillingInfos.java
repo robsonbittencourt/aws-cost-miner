@@ -61,6 +61,13 @@ public class BillingInfos {
                 .reduce(ZERO, BigDecimal::add);
     }
 
+    public BigDecimal totalHoursUsed() {
+        return this.infos.parallelStream()
+                .map(BillingInfo::getUsedHours)
+                .filter(Objects::nonNull)
+                .reduce(ZERO, BigDecimal::add);
+    }
+
     public BillingInfos betweenTimeRangeOfUsageStartDate(LocalTime start, LocalTime end) {
         Predicate<BillingInfo> equalsStart = b -> b.getUsageStartDate().toLocalTime().equals(start);
         Predicate<BillingInfo> afterStart = b -> b.getUsageStartDate().toLocalTime().isAfter(start);

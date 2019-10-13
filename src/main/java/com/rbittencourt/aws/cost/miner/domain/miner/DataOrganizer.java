@@ -3,8 +3,10 @@ package com.rbittencourt.aws.cost.miner.domain.miner;
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfoRepository;
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfos;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -21,6 +23,9 @@ class DataOrganizer {
     @Autowired
     private BillingInfoRepository repository;
 
+    @Value("${considerableCost:#{1}}")
+    private String considerableCost;
+
     Map<String, BillingInfos> organizeData(SearchParameters parameters) {
         BillingInfos billingInfos = repository.findBillingInfos();
 
@@ -28,8 +33,26 @@ class DataOrganizer {
         BillingInfos filteredBillingInfos = billingInfos.filter(parameters.getFilters());
 
         Map<String, BillingInfos> groupedBillingInfos = filteredBillingInfos.groupBy(parameters.getGroupBy());
+        Map<String, BillingInfos> groupedWithConsiderableCost = filterByConsiderableCost(groupedBillingInfos);
 
-        return sort(groupedBillingInfos);
+        return sort(groupedWithConsiderableCost);
+    }
+
+    private Map<String, BillingInfos> filterByConsiderableCost(Map<String, BillingInfos> groupedBillingInfos) {
+        validateConsiderableCost();
+
+        return groupedBillingInfos.entrySet()
+                    .stream()
+                    .filter(b -> b.getValue().totalCost().compareTo(new BigDecimal(considerableCost)) >= 0)
+                    .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    private void validateConsiderableCost() {
+        try {
+            new BigDecimal(considerableCost);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Invalid considerable cost: %s. Use only numeric values.", considerableCost));
+        }
     }
 
     private Map<String, BillingInfos> sort(Map<String, BillingInfos> groupedBillingInfos) {

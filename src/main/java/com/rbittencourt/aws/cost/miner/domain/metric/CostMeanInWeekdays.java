@@ -2,7 +2,7 @@ package com.rbittencourt.aws.cost.miner.domain.metric;
 
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfo;
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfos;
-import com.rbittencourt.aws.cost.miner.domain.mask.MoneyMaskedValue;
+import com.rbittencourt.aws.cost.miner.domain.mask.Money;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -40,7 +40,7 @@ class CostMeanInWeekdays implements Metric {
         BigDecimal totalCost = weekdayBillings.totalCost();
         BigDecimal average = weekdayDaysQuantity != 0 ? totalCost.divide(new BigDecimal(weekdayDaysQuantity), HALF_EVEN) : totalCost;
 
-        MetricValue metricValue = new MetricValue("Cost mean in weekdays", average, new MoneyMaskedValue(average));
+        MetricValue metricValue = new MetricValue("Cost mean in weekdays", average, new Money(average));
 
         return new MetricResult(description(), List.of(metricValue));
     }

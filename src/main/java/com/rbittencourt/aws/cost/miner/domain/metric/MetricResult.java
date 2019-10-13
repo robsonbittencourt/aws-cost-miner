@@ -8,21 +8,21 @@ import static java.util.Arrays.asList;
 
 public class MetricResult {
 
-    private String description;
+    private String metricName;
     private List<MetricValue> metricValues;
 
-    public MetricResult(String description, MetricValue metricValue) {
-        this.description = description;
+    public MetricResult(String metricName, MetricValue metricValue) {
+        this.metricName = metricName;
         this.metricValues = asList(metricValue);
     }
 
-    public MetricResult(String description, List<MetricValue> metricValues) {
-        this.description = description;
+    public MetricResult(String metricName, List<MetricValue> metricValues) {
+        this.metricName = metricName;
         this.metricValues = new ArrayList<>(metricValues);
     }
 
-    public Optional<String> getDescription() {
-        return Optional.ofNullable(description);
+    public Optional<String> getMetricName() {
+        return Optional.ofNullable(metricName);
     }
 
     public List<MetricValue> getMetricValues() {

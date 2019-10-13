@@ -52,8 +52,8 @@ class AwsCostMinerImpl implements AwsCostMiner {
 
     private void addInMetricResults(List<MetricResult> metricResults, MetricResult metricResult) {
         Optional<MetricResult> existentMetricResult = metricResults.stream()
-                .filter(m -> m.getDescription().isPresent())
-                .filter(m -> m.getDescription().equals(metricResult.getDescription()))
+                .filter(m -> m.getMetricName().isPresent())
+                .filter(m -> m.getMetricName().equals(metricResult.getMetricName()))
                 .findFirst();
 
         if (existentMetricResult.isPresent()) {

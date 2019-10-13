@@ -43,7 +43,7 @@ public class CostMeanInWeekendDaysTest {
         assertEquals(new BigDecimal(100), metricValue.getValue());
         assertEquals("$100.00", metricValue.getFormattedValue());
 
-        assertEquals("Daily Metrics", metricResult.getDescription().get());
+        assertEquals("Daily Metrics", metricResult.getMetricName().get());
     }
 
     @Test

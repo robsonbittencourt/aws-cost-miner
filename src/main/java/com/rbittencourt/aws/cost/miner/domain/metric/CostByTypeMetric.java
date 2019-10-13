@@ -2,7 +2,7 @@ package com.rbittencourt.aws.cost.miner.domain.metric;
 
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfo;
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfos;
-import com.rbittencourt.aws.cost.miner.domain.mask.MoneyMaskedValue;
+import com.rbittencourt.aws.cost.miner.domain.mask.Money;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -32,7 +32,7 @@ class CostByTypeMetric implements Metric {
                 .filter(e -> !e.getKey().isEmpty())
                 .map(e -> {
                     BigDecimal totalCost = e.getValue().totalCost();
-                    return new MetricValue(e.getKey(), totalCost, new MoneyMaskedValue(totalCost));
+                    return new MetricValue(e.getKey(), totalCost, new Money(totalCost));
                 })
                 .filter(m -> m.getValue().setScale(2, HALF_EVEN).compareTo(new BigDecimal("0.00")) > 0)
                 .sorted(comparing(MetricValue::getValue, reverseOrder()))
