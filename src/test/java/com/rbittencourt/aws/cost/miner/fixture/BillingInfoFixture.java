@@ -1,6 +1,7 @@
 package com.rbittencourt.aws.cost.miner.fixture;
 
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfo;
+import com.rbittencourt.aws.cost.miner.domain.billing.ReservedInstanceInfos;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -54,6 +55,16 @@ public class BillingInfoFixture {
 
     public BillingInfoFixture withUsageStartDate(LocalDateTime usageStartDate) {
         this.billingInfo.setUsageStartDate(usageStartDate);
+        return this;
+    }
+
+    public BillingInfoFixture withReservedInstances(ReservedInstanceInfos reservedInstanceInfos) {
+        this.billingInfo.setReservedInstances(reservedInstanceInfos);
+        return this;
+    }
+
+    public BillingInfoFixture withSubscriptionId(String subscriptionId) {
+        this.billingInfo.setSubscriptionId(subscriptionId);
         return this;
     }
 

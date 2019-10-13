@@ -2,20 +2,28 @@ package com.rbittencourt.aws.cost.miner.domain.metric;
 
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfo;
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfos;
+import com.rbittencourt.aws.cost.miner.domain.billing.ReservedInstanceInfos;
 import com.rbittencourt.aws.cost.miner.fixture.BillingInfoFixture;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
+import java.math.BigDecimal;
 import java.util.List;
 
+import static com.rbittencourt.aws.cost.miner.domain.billing.InstanceSize.LARGE;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class CostByInstanceTypeMetricTest {
 
     @InjectMocks
     private CostByInstanceTypeMetric metric;
+
+    @Mock
+    private ReservedInstanceInfos reservedInstanceInfos;
 
     @Before
     public void setup() {
@@ -29,15 +37,18 @@ public class CostByInstanceTypeMetricTest {
 
     @Test
     public void shouldCalculateCostAndHoursByInstanceType() {
-        BillingInfo m5OnDemand = BillingInfoFixture.get().withInstanceType("m5.large").onDemand().withCost(100).withUsedHours(500).build();
-        BillingInfo m5Spot = BillingInfoFixture.get().withInstanceType("m5.large").spotInstance().withCost(50).withUsedHours(300).build();
-        BillingInfo m5Reserved = BillingInfoFixture.get().withInstanceType("m5.large").reservedInstance().withCost(50).withUsedHours(200).build();
+        BillingInfo m5OnDemand = BillingInfoFixture.get().withInstanceType("m5.large").onDemand().withCost(100).withUsedHours(500).withReservedInstances(reservedInstanceInfos).build();
+        BillingInfo m5Spot = BillingInfoFixture.get().withInstanceType("m5.large").spotInstance().withCost(50).withUsedHours(300).withReservedInstances(reservedInstanceInfos).build();
+        BillingInfo m5Reserved = BillingInfoFixture.get().withInstanceType("m5.large").reservedInstance().withCost(50).withUsedHours(200).withSubscriptionId("1").withReservedInstances(reservedInstanceInfos).build();
 
-        BillingInfo c5OnDemand = BillingInfoFixture.get().withInstanceType("c5.large").onDemand().withCost(25).withUsedHours(200).build();
-        BillingInfo c5Spot = BillingInfoFixture.get().withInstanceType("c5.large").spotInstance().withCost(75).withUsedHours(300).build();
-        BillingInfo c5Reserved = BillingInfoFixture.get().withInstanceType("c5.large").reservedInstance().withCost(100).withUsedHours(500).build();
+        BillingInfo c5OnDemand = BillingInfoFixture.get().withInstanceType("c5.large").onDemand().withCost(25).withUsedHours(200).withReservedInstances(reservedInstanceInfos).build();
+        BillingInfo c5Spot = BillingInfoFixture.get().withInstanceType("c5.large").spotInstance().withCost(75).withUsedHours(300).withReservedInstances(reservedInstanceInfos).build();
+        BillingInfo c5Reserved = BillingInfoFixture.get().withInstanceType("c5.large").reservedInstance().withCost(100).withUsedHours(500).withSubscriptionId("2").withReservedInstances(reservedInstanceInfos).build();
 
         BillingInfos billingInfos = new BillingInfos(List.of(m5OnDemand, m5Spot, m5Reserved, c5OnDemand, c5Spot, c5Reserved));
+
+        when(reservedInstanceInfos.hourCost("1", LARGE)).thenReturn(new BigDecimal(0.25));
+        when(reservedInstanceInfos.hourCost("2", LARGE)).thenReturn(new BigDecimal(0.2));
 
         List<MetricValue> metricValues = metric.calculateMetric(billingInfos).getMetricValues();
 

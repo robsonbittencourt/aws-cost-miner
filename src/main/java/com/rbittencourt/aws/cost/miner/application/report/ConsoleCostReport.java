@@ -44,7 +44,6 @@ public class ConsoleCostReport {
 
         if (awsProduct != null) {
             searchParameters.addFilter(b -> awsProduct.getDescription().equals(b.getProductName()));
-            //searchParameters.addFilter(b -> b.getCustomField("user:Name").equals("us-umov-vpc-center-as"));
         }
 
         if (groupBy != null) {
