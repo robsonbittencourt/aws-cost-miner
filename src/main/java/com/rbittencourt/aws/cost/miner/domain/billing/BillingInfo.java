@@ -133,17 +133,7 @@ public class BillingInfo {
 
     public BigDecimal getCost() {
         if (getReservedInstance()) {
-            BigDecimal multiply = reservedInstances.hourCost(subscriptionId, instanceSize()).multiply(usedHours);
-
-            if (multiply == null) {
-                System.out.println("");
-            }
-
-            return multiply;
-        }
-
-        if (cost == null) {
-            System.out.println("");
+            return reservedInstances.hourCost(subscriptionId, instanceSize()).multiply(usedHours);
         }
 
         return cost;
