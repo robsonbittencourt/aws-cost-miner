@@ -1,19 +1,14 @@
 package com.rbittencourt.aws.cost.miner.application.report;
 
-import com.rbittencourt.aws.cost.miner.domain.awsproduct.AwsProduct;
-import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfo;
 import com.rbittencourt.aws.cost.miner.domain.miner.AwsCostMiner;
 import com.rbittencourt.aws.cost.miner.domain.miner.MinedData;
-import com.rbittencourt.aws.cost.miner.domain.miner.SearchParameters;
 import com.rbittencourt.aws.cost.miner.infrastructure.file.TemplateWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 @Component
 public class ConsoleCostReport {
@@ -24,45 +19,20 @@ public class ConsoleCostReport {
     @Autowired
     private TemplateWriter templateWriter;
 
-    @Value("${product:#{null}}")
-    private String product;
+    @Autowired
+    private ReportFactory reportFactory;
 
-    @Value("${groupBy:#{null}}")
-    private String groupBy;
+    @Value("${report:#{null}}")
+    private ReportType reportType;
 
     public void writeReport() {
-        AwsProduct awsProduct = AwsProduct.fromName(product);
-        SearchParameters searchParameters = buildSearchParameters(awsProduct);
-        List<MinedData> minedData = miner.miningCostData(awsProduct, searchParameters);
+        Report report = reportFactory.getInstance(reportType);
 
-        String output = templateWriter.write("ec2Report.vm", Map.of("minedData", minedData));
+        List<MinedData> minedData = miner.miningCostData(report);
+
+        String output = templateWriter.write(report.templateName(), Map.of("minedData", minedData));
+
         System.out.println(output);
-    }
-
-    private SearchParameters buildSearchParameters(AwsProduct awsProduct) {
-        SearchParameters searchParameters = new SearchParameters();
-
-        if (awsProduct != null) {
-            searchParameters.addFilter(b -> awsProduct.getDescription().equals(b.getProductName()));
-        }
-
-        if (groupBy != null) {
-            searchParameters.addGrouper(buildGroupByClause());
-        }
-        return searchParameters;
-    }
-
-    private Function<BillingInfo, String> buildGroupByClause() {
-        return b -> {
-            try {
-                Method method = b.getClass().getMethod("get" + groupBy);
-                return method.invoke(b).toString();
-            } catch (Exception e) {
-                // do nothing. This is expected.
-            }
-
-            return b.getCustomField(groupBy);
-        };
     }
 
 }

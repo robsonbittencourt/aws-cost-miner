@@ -2,7 +2,8 @@ package com.rbittencourt.aws.cost.miner.domain.awsproduct;
 
 public enum AwsProduct {
 
-    EC2("Amazon Elastic Compute Cloud");
+    EC2("Amazon Elastic Compute Cloud"),
+    RESERVED_INSTANCE("Amazon Elastic Compute Cloud");
 
     private String description;
 

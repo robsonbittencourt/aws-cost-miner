@@ -3,6 +3,7 @@ package com.rbittencourt.aws.cost.miner.domain.metric;
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfo;
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfos;
 import com.rbittencourt.aws.cost.miner.domain.mask.Money;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +16,10 @@ import static java.util.Comparator.comparing;
 import static java.util.Comparator.reverseOrder;
 import static java.util.stream.Collectors.toList;
 
-@Component
+
 @Order(1)
+@Component
+@Qualifier("ec2")
 class CostByTypeMetric implements Metric {
 
     @Override

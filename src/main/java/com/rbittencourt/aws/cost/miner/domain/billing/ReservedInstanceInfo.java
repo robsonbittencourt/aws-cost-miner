@@ -1,5 +1,6 @@
 package com.rbittencourt.aws.cost.miner.domain.billing;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
@@ -21,10 +22,10 @@ public class ReservedInstanceInfo {
     @JsonProperty("UsageQuantity")
     private BigDecimal usageQuantity;
 
-    @JsonProperty("Rate")
+    @JsonAlias({"Rate", "BlendedRate"})
     private BigDecimal rate;
 
-    @JsonProperty("Cost")
+    @JsonAlias({"Cost", "BlendedCost"})
     private BigDecimal cost;
 
     public String getProductName() {

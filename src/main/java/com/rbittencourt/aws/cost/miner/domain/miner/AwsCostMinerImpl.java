@@ -1,6 +1,6 @@
 package com.rbittencourt.aws.cost.miner.domain.miner;
 
-import com.rbittencourt.aws.cost.miner.domain.awsproduct.AwsProduct;
+import com.rbittencourt.aws.cost.miner.application.report.Report;
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfos;
 import com.rbittencourt.aws.cost.miner.domain.metric.Metric;
 import com.rbittencourt.aws.cost.miner.domain.metric.MetricResult;
@@ -22,13 +22,13 @@ class AwsCostMinerImpl implements AwsCostMiner {
     @Autowired
     private MetricsFactory metricsFactory;
 
-    public List<MinedData> miningCostData(AwsProduct serviceType, SearchParameters searchParameters) {
-        Map<String, BillingInfos> billingInfos = dataOrganizer.organizeData(searchParameters);
+    public List<MinedData> miningCostData(Report report) {
+        Map<String, BillingInfos> billingInfos = dataOrganizer.organizeData(report.buildSearchParameters());
 
-        return minedData(serviceType, billingInfos);
+        return minedData(report, billingInfos);
     }
 
-    private List<MinedData> minedData(AwsProduct serviceType, Map<String, BillingInfos> groupedBillingInfos) {
+    private List<MinedData> minedData(Report serviceType, Map<String, BillingInfos> groupedBillingInfos) {
         List<MinedData> minedData = new ArrayList<>();
 
         for (Map.Entry<String, BillingInfos> entry : groupedBillingInfos.entrySet()) {
@@ -39,7 +39,7 @@ class AwsCostMinerImpl implements AwsCostMiner {
         return minedData;
     }
 
-    private List<MetricResult> getMetricResults(AwsProduct serviceType, Map.Entry<String, BillingInfos> entry) {
+    private List<MetricResult> getMetricResults(Report serviceType, Map.Entry<String, BillingInfos> entry) {
         List<MetricResult> metricResults = new ArrayList<>();
 
         for (Metric metric : metricsFactory.build(serviceType)) {

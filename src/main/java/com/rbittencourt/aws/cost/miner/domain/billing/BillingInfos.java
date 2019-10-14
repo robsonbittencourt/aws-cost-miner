@@ -92,6 +92,9 @@ public class BillingInfos {
         return this.infos.size();
     }
 
+    public List<BillingInfo> getBillingInfos() {
+        return this.infos;
+    }
 
     public BillingInfo get(int index) {
         return this.infos.get(index);
@@ -99,6 +102,14 @@ public class BillingInfos {
 
     public Stream<BillingInfo> stream() {
         return this.infos.stream();
+    }
+
+    public List<ReservedInstanceInfo> reservedInstanceInfos() {
+        if (this.infos.isEmpty() || this.infos.get(0).getReservedInstances().getReservedInstanceInfos().isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        return this.infos.get(0).getReservedInstances().getReservedInstanceInfos();
     }
 
 }

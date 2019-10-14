@@ -11,6 +11,10 @@ public class ReservedInstanceInfos {
         this.reservedInstanceInfos = reservedInstanceInfos;
     }
 
+    public List<ReservedInstanceInfo> getReservedInstanceInfos() {
+        return reservedInstanceInfos;
+    }
+
     public BigDecimal hourCost(String subscriptionId, InstanceSize instanceSize) {
         ReservedInstanceInfo reservedInfo = reservedInstanceInfos.stream()
                                                          .filter(r -> r.getSubscriptionId().equals(subscriptionId))

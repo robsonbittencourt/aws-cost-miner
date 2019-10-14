@@ -1,5 +1,6 @@
 package com.rbittencourt.aws.cost.miner.domain.billing;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -43,7 +44,7 @@ public class BillingInfo {
     @JsonProperty("UsageQuantity")
     private BigDecimal usedHours;
 
-    @JsonProperty("Cost")
+    @JsonAlias({"Cost", "BlendedCost"})
     private BigDecimal cost;
 
     @JsonProperty("RecordType")
@@ -132,7 +133,17 @@ public class BillingInfo {
 
     public BigDecimal getCost() {
         if (getReservedInstance()) {
-            return reservedInstances.hourCost(subscriptionId, instanceSize()).multiply(usedHours);
+            BigDecimal multiply = reservedInstances.hourCost(subscriptionId, instanceSize()).multiply(usedHours);
+
+            if (multiply == null) {
+                System.out.println("");
+            }
+
+            return multiply;
+        }
+
+        if (cost == null) {
+            System.out.println("");
         }
 
         return cost;
@@ -148,6 +159,10 @@ public class BillingInfo {
 
     public void setRecordType(String recordType) {
         this.recordType = recordType;
+    }
+
+    public ReservedInstanceInfos getReservedInstances() {
+        return reservedInstances;
     }
 
     public void setReservedInstances(ReservedInstanceInfos reservedInstances) {

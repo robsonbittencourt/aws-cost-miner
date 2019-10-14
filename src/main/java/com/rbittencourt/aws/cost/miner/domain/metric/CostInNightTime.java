@@ -2,6 +2,7 @@ package com.rbittencourt.aws.cost.miner.domain.metric;
 
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfos;
 import com.rbittencourt.aws.cost.miner.domain.mask.Money;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import static java.math.RoundingMode.HALF_EVEN;
 
 @Order(6)
 @Component
+@Qualifier("ec2")
 class CostInNightTime implements Metric {
 
     @Override

@@ -6,6 +6,7 @@ import com.rbittencourt.aws.cost.miner.domain.billing.EC2PricingModel;
 import com.rbittencourt.aws.cost.miner.domain.mask.Hour;
 import com.rbittencourt.aws.cost.miner.domain.mask.Money;
 import com.rbittencourt.aws.cost.miner.domain.mask.Percent;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -22,6 +23,7 @@ import static java.util.Comparator.reverseOrder;
 import static java.util.stream.Collectors.toMap;
 
 @Component
+@Qualifier("ec2")
 public class CostByInstanceTypeMetric implements Metric {
 
     public String description() {
