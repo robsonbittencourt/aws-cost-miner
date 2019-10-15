@@ -7,5 +7,7 @@
  #parse("total-cost.vm")
  #parse("cost-by-usage-type.vm")
  #parse("daily-metrics.vm")
+ #parse("cost-by-pricing-model.vm")
+ #parse("cost-by-instance-family.vm")
  #parse("cost-by-instance-type.vm")
 #end

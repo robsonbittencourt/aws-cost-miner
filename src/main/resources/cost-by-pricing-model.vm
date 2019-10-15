@@ -1,0 +1,12 @@
+ #set($values = $data.metricResult.get(3).metricValues)
+ ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+ │$StringUtils.center("Cost By Pricing Model", 96)│
+ ├────────────────────────────────────┬─────────────────┬───────────┬─────────────────┬───────────┤
+ │ Pricing Model                      │      Hour       │   Hour %  │       Cost      │   Cost %  │
+ ├────────────────────────────────────┼─────────────────┼───────────┼─────────────────┼───────────┤
+ │ $StringUtils.rightPad($values.get(0), 34) │ $StringUtils.leftPad($values.get(1), 15) │ $StringUtils.leftPad($values.get(2), 9) │ $StringUtils.leftPad($values.get(3), 15) │ $StringUtils.leftPad($values.get(4), 9) │
+ ├────────────────────────────────────┼─────────────────┼───────────┼─────────────────┼───────────┤
+ │ $StringUtils.rightPad($values.get(5), 34) │ $StringUtils.leftPad($values.get(6), 15) │ $StringUtils.leftPad($values.get(7), 9) │ $StringUtils.leftPad($values.get(8), 15) │ $StringUtils.leftPad($values.get(9), 9) │
+ ├────────────────────────────────────┼─────────────────┼───────────┼─────────────────┼───────────┤
+ │ $StringUtils.rightPad($values.get(10), 34) │ $StringUtils.leftPad($values.get(11), 15) │ $StringUtils.leftPad($values.get(12), 9) │ $StringUtils.leftPad($values.get(13), 15) │ $StringUtils.leftPad($values.get(14), 9) │
+ └────────────────────────────────────┴─────────────────┴───────────┴─────────────────┴───────────┘

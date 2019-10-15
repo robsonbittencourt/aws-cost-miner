@@ -42,7 +42,7 @@ public class MetricValue {
 
     @Override
     public String toString() {
-        return description + ": " + formattedValue;
+        return formattedValue;
     }
 
     @Override

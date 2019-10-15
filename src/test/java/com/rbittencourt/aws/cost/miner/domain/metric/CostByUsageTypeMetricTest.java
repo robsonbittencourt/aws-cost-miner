@@ -14,10 +14,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class CostByTypeMetricTest {
+public class CostByUsageTypeMetricTest {
 
     @InjectMocks
-    private CostByTypeMetric metric;
+    private CostByUsageTypeMetric metric;
 
     @Before
     public void setup() {

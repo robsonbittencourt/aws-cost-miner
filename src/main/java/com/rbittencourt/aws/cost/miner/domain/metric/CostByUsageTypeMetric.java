@@ -20,7 +20,7 @@ import static java.util.stream.Collectors.toList;
 @Order(1)
 @Component
 @Qualifier("ec2")
-class CostByTypeMetric implements Metric {
+class CostByUsageTypeMetric implements Metric {
 
     @Override
     public String description() {

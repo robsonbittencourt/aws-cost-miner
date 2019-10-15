@@ -23,19 +23,19 @@ import static java.util.Comparator.comparing;
 import static java.util.Comparator.reverseOrder;
 import static java.util.stream.Collectors.toMap;
 
-@Order(9)
+@Order(8)
 @Component
 @Qualifier("ec2")
-public class CostByInstanceTypeMetric implements Metric {
+public class CostByInstanceFamilyMetric implements Metric {
 
     public String description() {
-        return "Cost by Instance Type";
+        return "Cost by Instance Family";
     }
 
     public MetricResult calculateMetric(BillingInfos billingInfos) {
         BillingInfos instancesBilling = billingInfos.filter(BillingInfo::isEC2Instance);
 
-        Map<String, BillingInfos> billingByInstanceFamily = sort(instancesBilling.groupBy(BillingInfo::ec2InstanceType));
+        Map<String, BillingInfos> billingByInstanceFamily = sort(instancesBilling.groupBy(BillingInfo::instanceFamily));
 
         List<MetricValue> values = new ArrayList<>();
 
@@ -63,7 +63,7 @@ public class CostByInstanceTypeMetric implements Metric {
     private List<MetricValue> metricOfType(String instanceType, EC2PricingModel pricingModel, BigDecimal totalHours, BigDecimal totalCost, Map<String, BillingInfos> byPricingModel) {
         List<MetricValue> values = new ArrayList<>();
 
-        values.add(new MetricValue("Instance Type", instanceType));
+        values.add(new MetricValue("Instance Family", instanceType));
         values.add(new MetricValue("Pricing Model", pricingModel.getDescription()));
 
         BillingInfos billingInfos = byPricingModel.get(pricingModel.getDescription());
@@ -106,7 +106,7 @@ public class CostByInstanceTypeMetric implements Metric {
     private List<MetricValue> total(Map.Entry<String, BillingInfos> entry) {
         List<MetricValue> values = new ArrayList<>();
 
-        values.add(new MetricValue("Instance Type", entry.getKey()));
+        values.add(new MetricValue("Instance Family", entry.getKey()));
         values.add(new MetricValue("Pricing Model", "Total"));
         values.add(new MetricValue("Hours", new Hour(entry.getValue().totalHoursUsed()).getMaskedValue()));
         values.add(new MetricValue("Hours %", new Percent(new BigDecimal(100)).getMaskedValue()));

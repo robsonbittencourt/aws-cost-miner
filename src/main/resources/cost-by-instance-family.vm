@@ -1,9 +1,9 @@
  #set($columnsQuantity = 6)
  #set($instanceTypeIndex = $columnsQuantity)
- #set($metricValues = $data.metricResult.get(5).metricValues)
+ #set($metricValues = $data.metricResult.get(4).metricValues)
  #if(!$metricValues.isEmpty())
  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
- │$StringUtils.center("Cost By Instance Type", 96)│
+ │$StringUtils.center("Cost By Instance Family", 96)│
  ├────────────────┬───────────────────┬─────────────────┬───────────┬─────────────────┬───────────┤
  │ Instance Type  │  Pricing Model    │      Hour       │   Hour %  │       Cost      │   Cost %  │
  ├────────────────┼───────────────────┼─────────────────┼───────────┼─────────────────┼───────────┤

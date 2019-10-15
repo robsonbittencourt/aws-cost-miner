@@ -183,6 +183,12 @@ public class BillingInfo {
         }
     }
 
+    public String instanceFamily() {
+        String instanceType = ec2InstanceType();
+
+        return instanceType.substring(0, instanceType.lastIndexOf("."));
+    }
+
     public InstanceSize instanceSize() {
         String instanceSize = usageType.substring(usageType.lastIndexOf(".") + 1);
         return InstanceSize.fromDescription(instanceSize);
