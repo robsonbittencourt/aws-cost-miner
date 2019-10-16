@@ -1,29 +1,18 @@
 package com.rbittencourt.aws.cost.miner.infrastructure.file;
 
-import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.rbittencourt.aws.cost.miner.domain.billing.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayList;
 import java.util.List;
 
-import static java.nio.charset.StandardCharsets.ISO_8859_1;
+import static java.util.stream.Collectors.toList;
 
 @Repository
 public class BillingInfoCsvRepository implements BillingInfoRepository {
 
     @Autowired
-    private CsvMapper csvMapper;
-
-    @Autowired
-    private CsvSchema csvSchema;
+    private CsvReader csvReader;
 
     @Autowired
     private ReservedInstanceInfoRepository reservedInstanceInfoRepository;
@@ -32,28 +21,18 @@ public class BillingInfoCsvRepository implements BillingInfoRepository {
 
     @Override
     public BillingInfos findBillingInfos() {
-        ObjectReader objectReader = csvMapper.readerFor(BillingInfo.class).with(csvSchema);
-
-        List<BillingInfo> billingInfos = new ArrayList<>();
-
         ReservedInstanceInfos reservedInstanceInfos = reservedInstanceInfoRepository.findReservedInstanceInfos();
 
-        try (Reader reader = new FileReader(userDir, ISO_8859_1)) {
-            MappingIterator<BillingInfo> iterator = objectReader.readValues(reader);
+        List<BillingInfo> billingInfos = csvReader.csvToObjects(userDir, BillingInfo.class)
+                .parallelStream()
+                .filter(b -> !b.getUsageType().contains("HeavyUsage"))
+                .collect(toList());
 
-            while (iterator.hasNext()) {
-                BillingInfo billingInfo = iterator.next();
+        billingInfos.parallelStream().forEach(b -> b.setReservedInstances(reservedInstanceInfos));
 
-                if (!billingInfo.getUsageType().contains("HeavyUsage")) {
-                    billingInfo.setReservedInstances(reservedInstanceInfos);
-                    billingInfos.add(billingInfo);
-                }
-            }
-
-            return new BillingInfos(billingInfos);
-        } catch (IOException e) {
-            return new BillingInfos(new ArrayList<>());
-        }
+        return new BillingInfos(billingInfos);
     }
+
+
 
 }

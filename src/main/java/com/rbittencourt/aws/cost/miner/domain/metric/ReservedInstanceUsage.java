@@ -4,7 +4,6 @@ import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfo;
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfos;
 import com.rbittencourt.aws.cost.miner.domain.billing.ReservedInstanceInfo;
 import com.rbittencourt.aws.cost.miner.domain.mask.Percent;
-import com.rbittencourt.aws.cost.miner.domain.utils.BigDecimalUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.rbittencourt.aws.cost.miner.domain.utils.BigDecimalUtils.percentOf;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
@@ -40,7 +40,7 @@ public class ReservedInstanceUsage implements Metric {
                 usageFromReserved = usageFromReserved.add(billingInfo.getUsedHours().multiply(normalizedFactor));
             }
 
-            BigDecimal percentUsedOfReserved = BigDecimalUtils.percentOf(usageFromReserved, reservedInfo.getUsageQuantity());
+            BigDecimal percentUsedOfReserved = percentOf(usageFromReserved, reservedInfo.getUsageQuantity());
 
             metricValues.add(new MetricValue(reservedInfo.getItemDescription(), percentUsedOfReserved, new Percent(percentUsedOfReserved)));
         }
