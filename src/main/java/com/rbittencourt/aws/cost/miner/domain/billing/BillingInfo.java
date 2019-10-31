@@ -44,7 +44,7 @@ public class BillingInfo {
     @JsonProperty("UsageQuantity")
     private BigDecimal usedHours;
 
-    @JsonAlias({"Cost", "BlendedCost"})
+    @JsonAlias({"Cost", "UnBlendedCost"})
     private BigDecimal cost;
 
     @JsonProperty("RecordType")
