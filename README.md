@@ -34,7 +34,7 @@ docker run --rm \
     robsonbittencourt/aws-cost-miner
 ```
 
-You can group the data according to one of the columns of the CSV file. Use the column name as it is in the file.
+You can group the data according to one of the columns of the CSV file. Use the column name as it is in the file. Your tags can be used just like the example below.
 
 ```
 docker run --rm \
