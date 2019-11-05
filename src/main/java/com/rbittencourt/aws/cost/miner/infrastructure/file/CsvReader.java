@@ -41,8 +41,6 @@ public class CsvReader {
 
                 if (stopCondition.test(next)) {
                     objects.add(next);
-                } else {
-                    break;
                 }
             }
 
