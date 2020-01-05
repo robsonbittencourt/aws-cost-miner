@@ -1,4 +1,6 @@
 # AWS Cost Miner
+[![Build Status](https://travis-ci.com/robsonbittencourt/aws-cost-miner.svg?branch=master)](https://travis-ci.com/robsonbittencourt/aws-cost-miner)   [![Docker Stars](https://img.shields.io/docker/stars/robsonbittencourt/aws-cost-miner.svg)](https://hub.docker.com/r/robsonbittencourt/aws-cost-miner/)  [![Docker Pulls](https://img.shields.io/docker/pulls/robsonbittencourt/aws-cost-miner.svg)](https://hub.docker.com/r/robsonbittencourt/aws-cost-miner/)  [![image-size](https://images.microbadger.com/badges/image/robsonbittencourt/aws-cost-miner.svg)](http://microbadger.com/images/robsonbittencourt/aws-cost-miner)
+
 > Application to extract useful information from AWS Billing Report
 
 ## Goal
