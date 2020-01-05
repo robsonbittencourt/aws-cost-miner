@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 public class Percent implements MaskedValue {
 
     private static final String PERCENT = "%";
+    private static final BigDecimal HUNDRED_PERCENT = new BigDecimal("100.00");
 
     private BigDecimal value;
 
@@ -18,7 +19,13 @@ public class Percent implements MaskedValue {
             return "";
         }
 
-        return value.setScale(2) + PERCENT;
+        BigDecimal roundedValue = value.setScale(2);
+
+        if (roundedValue.compareTo(HUNDRED_PERCENT) > 0) {
+            return HUNDRED_PERCENT + PERCENT;
+        }
+
+        return roundedValue + PERCENT;
     }
 
     @Override

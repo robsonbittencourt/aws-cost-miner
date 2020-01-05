@@ -13,7 +13,11 @@ public class ReservedInstanceUsageReport implements Report {
     }
 
     public SearchParameters buildSearchParameters() {
-        return new SearchParameters();
+        SearchParameters searchParameters = new SearchParameters();
+
+        searchParameters.addFilter(b -> "Amazon Elastic Compute Cloud".equals(b.getProductName()));
+
+        return searchParameters;
     }
 
     @Override
