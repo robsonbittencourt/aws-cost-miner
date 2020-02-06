@@ -25,7 +25,7 @@ public enum EC2PricingModel {
             return RESERVED_INSTANCE;
         }
 
-        return null;
+        throw new IllegalStateException("Pricing model can't be defined. Item description: " + billingInfo.getItemDescription());
     }
 
     public String getDescription() {

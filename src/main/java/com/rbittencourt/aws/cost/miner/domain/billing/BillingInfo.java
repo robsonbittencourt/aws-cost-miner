@@ -164,7 +164,7 @@ public class BillingInfo {
     }
 
     public boolean getSpotInstance() {
-        return itemDescription!= null && itemDescription.contains("Spot Instance");
+        return itemDescription != null && itemDescription.contains("Spot Instance");
     }
 
     public boolean getOnDemand() {
