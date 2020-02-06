@@ -15,6 +15,7 @@ import static com.rbittencourt.aws.cost.miner.domain.awsproduct.AwsProduct.EC2;
 @Repository
 public class ReservedInstanceInfoCsvRepository implements ReservedInstanceInfoRepository {
 
+    private static final String RI_USAGE_TYPE = "HeavyUsage";
     private static final String MB_PRICING_ADJUSTMENT = "MB - Pricing Adjustment";
 
     @Autowired
@@ -24,7 +25,7 @@ public class ReservedInstanceInfoCsvRepository implements ReservedInstanceInfoRe
 
     @Override
     public ReservedInstanceInfos findReservedInstanceInfos() {
-        Predicate<ReservedInstanceInfo> conditionToStop = reserved -> reserved.getUsageType().contains("HeavyUsage");
+        Predicate<ReservedInstanceInfo> conditionToStop = reserved -> reserved.getUsageType() != null && reserved.getUsageType().contains(RI_USAGE_TYPE);
         List<ReservedInstanceInfo> reservedInstanceInfos = csvReader.csvToObjects(userDir, ReservedInstanceInfo.class, conditionToStop);
 
         List<ReservedInstanceInfo> ec2ReservedInfo = reservedInstanceInfos.stream()
