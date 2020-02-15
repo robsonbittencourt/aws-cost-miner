@@ -15,7 +15,11 @@ public class AwsCostMinerApplication {
 
 	@PostConstruct
 	public void start() {
+		long initTime = System.currentTimeMillis();
 		report.writeReport();
+		long endTime = System.currentTimeMillis();
+
+		System.out.println("Tempo: " + (endTime - initTime));
 	}
 
 	public static void main(String[] args) {

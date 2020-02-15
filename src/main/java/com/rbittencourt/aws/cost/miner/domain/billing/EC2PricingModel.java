@@ -6,6 +6,8 @@ public enum EC2PricingModel {
     SPOT_INSTANCE("Spot Instance"),
     RESERVED_INSTANCE("Reserved Instance");
 
+    private static final String CUR_RESERVED_INSTANCES_SUBSTRING = "reserved instance applied";
+
     private String description;
 
     EC2PricingModel(String description) {
@@ -21,7 +23,7 @@ public enum EC2PricingModel {
             return SPOT_INSTANCE;
         }
 
-        if (billingInfo.getReservedInstance()) {
+        if (billingInfo.getReservedInstance() || billingInfo.getItemDescription().contains(CUR_RESERVED_INSTANCES_SUBSTRING)) {
             return RESERVED_INSTANCE;
         }
 

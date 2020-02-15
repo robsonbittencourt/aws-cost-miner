@@ -2,7 +2,6 @@ package com.rbittencourt.aws.cost.miner.domain.metric;
 
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfo;
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfos;
-import com.rbittencourt.aws.cost.miner.domain.billing.ReservedInstanceInfo;
 import com.rbittencourt.aws.cost.miner.domain.mask.Percent;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -28,9 +27,9 @@ public class ReservedInstanceUsage implements Metric {
     public MetricResult calculateMetric(BillingInfos billingInfos) {
         List<MetricValue> metricValues = new ArrayList<>();
 
-        List<ReservedInstanceInfo> reservedInstanceInfos = billingInfos.reservedInstanceInfos();
+        List<BillingInfo> reservedInstanceInfos = billingInfos.reservedInstanceInfos();
 
-        for (ReservedInstanceInfo reservedInfo : reservedInstanceInfos) {
+        for (BillingInfo reservedInfo : reservedInstanceInfos) {
             BigDecimal usageFromReserved = BigDecimal.ZERO;
 
             BillingInfos infosOfReserved = billingInfos.filter(b -> b.getSubscriptionId().equals(reservedInfo.getSubscriptionId()));
@@ -40,7 +39,7 @@ public class ReservedInstanceUsage implements Metric {
                 usageFromReserved = usageFromReserved.add(billingInfo.getUsedHours().multiply(normalizedFactor));
             }
 
-            BigDecimal percentUsedOfReserved = percentOf(usageFromReserved, reservedInfo.getUsageQuantity());
+            BigDecimal percentUsedOfReserved = percentOf(usageFromReserved, reservedInfo.getUsedHours());
 
             metricValues.add(new MetricValue(reservedInfo.getItemDescription(), percentUsedOfReserved, new Percent(percentUsedOfReserved)));
         }

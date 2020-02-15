@@ -2,7 +2,6 @@ package com.rbittencourt.aws.cost.miner.domain.metric;
 
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfo;
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfos;
-import com.rbittencourt.aws.cost.miner.domain.billing.ReservedInstanceInfo;
 import com.rbittencourt.aws.cost.miner.domain.billing.ReservedInstanceInfos;
 import com.rbittencourt.aws.cost.miner.fixture.BillingInfoFixture;
 import org.junit.Before;
@@ -27,16 +26,16 @@ public class ReservedInstanceUsageTest {
 
     @Test
     public void shouldCalculatePercentOfUsageOfReservedInstances() {
-        ReservedInstanceInfo reservedInstanceInfo1 = new ReservedInstanceInfo();
+        BillingInfo reservedInstanceInfo1 = new BillingInfo();
         reservedInstanceInfo1.setSubscriptionId("1");
-        reservedInstanceInfo1.setUsageQuantity(new BigDecimal(100));
+        reservedInstanceInfo1.setUsedHours(new BigDecimal(100));
         reservedInstanceInfo1.setUsageType("m5.16xlarge");
         reservedInstanceInfo1.setItemDescription("Reserved Instance m5.16xlarge");
         reservedInstanceInfo1.setRate(BigDecimal.TEN);
 
-        ReservedInstanceInfo reservedInstanceInfo2 = new ReservedInstanceInfo();
+        BillingInfo reservedInstanceInfo2 = new BillingInfo();
         reservedInstanceInfo2.setSubscriptionId("2");
-        reservedInstanceInfo2.setUsageQuantity(new BigDecimal(2000));
+        reservedInstanceInfo2.setUsedHours(new BigDecimal(2000));
         reservedInstanceInfo2.setUsageType("c5.medium");
         reservedInstanceInfo2.setItemDescription("Reserved Instance c5.medium");
         reservedInstanceInfo2.setRate(BigDecimal.ONE);

@@ -104,7 +104,7 @@ public class BillingInfos {
         return this.infos.stream();
     }
 
-    public List<ReservedInstanceInfo> reservedInstanceInfos() {
+    public List<BillingInfo> reservedInstanceInfos() {
         if (this.infos.isEmpty() || this.infos.get(0).getReservedInstances().getReservedInstanceInfos().isEmpty()) {
             return new ArrayList<>();
         }

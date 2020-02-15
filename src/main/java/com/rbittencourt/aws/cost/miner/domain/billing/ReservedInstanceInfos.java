@@ -5,18 +5,18 @@ import java.util.List;
 
 public class ReservedInstanceInfos {
 
-    private List<ReservedInstanceInfo> reservedInstanceInfos;
+    private List<BillingInfo> reservedInstanceInfos;
 
-    public ReservedInstanceInfos(List<ReservedInstanceInfo> reservedInstanceInfos) {
+    public ReservedInstanceInfos(List<BillingInfo> reservedInstanceInfos) {
         this.reservedInstanceInfos = reservedInstanceInfos;
     }
 
-    public List<ReservedInstanceInfo> getReservedInstanceInfos() {
+    public List<BillingInfo> getReservedInstanceInfos() {
         return reservedInstanceInfos;
     }
 
     public BigDecimal hourCost(String subscriptionId, InstanceSize instanceSize) {
-        ReservedInstanceInfo reservedInfo = reservedInstanceInfos.stream()
+        BillingInfo reservedInfo = reservedInstanceInfos.stream()
                                                          .filter(r -> r.getSubscriptionId().equals(subscriptionId))
                                                          .findFirst()
                                                          .orElseThrow(() -> new RuntimeException("Invalid subscription id found: " + subscriptionId));

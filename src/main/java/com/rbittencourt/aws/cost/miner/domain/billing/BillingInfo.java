@@ -2,9 +2,8 @@ package com.rbittencourt.aws.cost.miner.domain.billing;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.rbittencourt.aws.cost.miner.infrastructure.config.serialization.BooleanDeserializer;
+import com.rbittencourt.aws.cost.miner.infrastructure.config.serialization.ReservedInstanceDeserializer;
 import com.rbittencourt.aws.cost.miner.infrastructure.config.serialization.LocalDateTimeDeserializer;
 
 import java.math.BigDecimal;
@@ -14,40 +13,43 @@ import java.util.Map;
 
 public class BillingInfo {
 
-    @JsonProperty("ProductName")
+    @JsonAlias({"ProductName", "product/ProductName"})
     private String productName;
 
-    @JsonProperty("UsageType")
+    @JsonAlias({"UsageType", "lineItem/UsageType"})
     private String usageType;
 
-    @JsonProperty("SubscriptionId")
+    @JsonAlias({"SubscriptionId", "reservation/SubscriptionId"})
     private String subscriptionId;
 
-    @JsonProperty("AvailabilityZone")
+    @JsonAlias({"AvailabilityZone", "lineItem/AvailabilityZone"})
     private String availabilityZone;
 
-    @JsonDeserialize(using = BooleanDeserializer.class)
-    @JsonProperty("ReservedInstance")
+    @JsonDeserialize(using = ReservedInstanceDeserializer.class)
+    @JsonAlias({"ReservedInstance", "reservation/ReservationARN"})
     private boolean reservedInstance;
 
-    @JsonProperty("ItemDescription")
+    @JsonAlias({"ItemDescription", "lineItem/LineItemDescription"})
     private String itemDescription;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonProperty("UsageStartDate")
+    @JsonAlias({"UsageStartDate", "lineItem/UsageStartDate"})
     private LocalDateTime usageStartDate;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonProperty("UsageEndDate")
+    @JsonAlias({"UsageEndDate", "lineItem/UsageEndDate"})
     private LocalDateTime usageEndDate;
 
-    @JsonProperty("UsageQuantity")
+    @JsonAlias({"UsageQuantity", "lineItem/UsageAmount"})
     private BigDecimal usedHours;
 
-    @JsonAlias({"Cost", "UnBlendedCost"})
+    @JsonAlias({"Rate", "BlendedRate", "lineItem/BlendedRate"})
+    private BigDecimal rate;
+
+    @JsonAlias({"Cost", "UnBlendedCost", "lineItem/UnblendedCost"})
     private BigDecimal cost;
 
-    @JsonProperty("RecordType")
+    @JsonAlias("RecordType")
     private String recordType;
 
     private Map<String, String> otherFields = new LinkedHashMap<>();
@@ -131,8 +133,16 @@ public class BillingInfo {
         this.usedHours = usedHours;
     }
 
+    public BigDecimal getRate() {
+        return rate;
+    }
+
+    public void setRate(BigDecimal rate) {
+        this.rate = rate;
+    }
+
     public BigDecimal getCost() {
-        if (getReservedInstance()) {
+        if (!isReservedInstancePurchaseInfo() && getReservedInstance()) {
             return reservedInstances.hourCost(subscriptionId, instanceSize()).multiply(usedHours);
         }
 
@@ -196,6 +206,10 @@ public class BillingInfo {
 
     public EC2PricingModel ec2PricingModel() {
         return EC2PricingModel.byBillingInfo(this);
+    }
+
+    public boolean isReservedInstancePurchaseInfo() {
+        return usageType != null && usageType.contains("HeavyUsage");
     }
 
 }
