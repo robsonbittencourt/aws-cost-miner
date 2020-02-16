@@ -196,7 +196,11 @@ public class BillingInfo {
     public String instanceFamily() {
         String instanceType = ec2InstanceType();
 
-        return instanceType.substring(0, instanceType.lastIndexOf("."));
+        try {
+            return instanceType.substring(0, instanceType.lastIndexOf("."));
+        } catch(Exception e) {
+            return "Unknown instance family: " + instanceType;
+        }
     }
 
     public InstanceSize instanceSize() {
