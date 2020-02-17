@@ -199,7 +199,7 @@ public class BillingInfo {
         try {
             return instanceType.substring(0, instanceType.lastIndexOf("."));
         } catch(Exception e) {
-            return "Unknown instance family: " + instanceType;
+            return "Unknown";
         }
     }
 
