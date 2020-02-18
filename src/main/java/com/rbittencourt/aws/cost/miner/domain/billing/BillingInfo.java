@@ -186,7 +186,7 @@ public class BillingInfo {
     }
 
     public String ec2InstanceType() {
-        if (usageType.equals("BoxUsage")) {
+        if (usageType.contains("BoxUsage") && !usageType.contains(":")) {
             return "m1.small"; //for some reason AWS doesn't follow the pattern with this instance type
         } else  {
             return usageType.substring(usageType.lastIndexOf(":") + 1);
