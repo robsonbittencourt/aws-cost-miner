@@ -18,6 +18,7 @@ public class BillingInfoCsvRepository implements BillingInfoRepository {
     private static final String HEAVY_USAGE = "HeavyUsage";
     private static final String TAX_FOR_PRODUCT = "Tax for product";
     private static final String MB_PRICING_ADJUSTMENT = "MB - Pricing Adjustment";
+    public static final String SAVINGS_PLAN_NEGATION = "SavingsPlanNegation";
 
     @Autowired
     private CsvReader csvReader;
@@ -45,6 +46,7 @@ public class BillingInfoCsvRepository implements BillingInfoRepository {
     private List<BillingInfo> ec2InstancesInfo(List<BillingInfo> billingInfos, ReservedInstanceInfos ec2ReservedInfos) {
         return billingInfos.parallelStream()
                 .filter(b -> !b.getUsageType().contains(HEAVY_USAGE))
+                .filter(r -> !r.getRecordType().equals(SAVINGS_PLAN_NEGATION))
                 .filter(b -> !b.getItemDescription().contains(TAX_FOR_PRODUCT))
                 .peek(b -> b.setReservedInstances(ec2ReservedInfos))
                 .collect(toList());

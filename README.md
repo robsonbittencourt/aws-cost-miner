@@ -11,7 +11,12 @@ The goal of this project is to provide useful and organized data on the costs of
 
 ## Mining Data
 
-AWS provides a report in CSV format of all your detailed costs. This report is in a bucket of your S3. More details on how to get it [click here](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/DetailedBillingReport.html).
+AWS provides a report in CSV format of all your detailed costs. This report is in a bucket of your S3.
+There are two ways to enable reports:
+
+[Detailed Billing Report - DBR  (*DEPRECATED*)](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/DetailedBillingReport.html)
+
+[Cost and Usage Reports - CUR (*Recomended*)](https://docs.aws.amazon.com/cur/latest/userguide/cur-create.html)
 
 With this file in hand, simply execute one of the docker commands below, as needed.
 

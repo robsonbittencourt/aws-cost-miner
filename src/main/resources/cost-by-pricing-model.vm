@@ -9,4 +9,6 @@
  │ $StringUtils.rightPad($values.get(5), 34) │ $StringUtils.leftPad($values.get(6), 15) │ $StringUtils.leftPad($values.get(7), 9) │ $StringUtils.leftPad($values.get(8), 15) │ $StringUtils.leftPad($values.get(9), 9) │
  ├────────────────────────────────────┼─────────────────┼───────────┼─────────────────┼───────────┤
  │ $StringUtils.rightPad($values.get(10), 34) │ $StringUtils.leftPad($values.get(11), 15) │ $StringUtils.leftPad($values.get(12), 9) │ $StringUtils.leftPad($values.get(13), 15) │ $StringUtils.leftPad($values.get(14), 9) │
+ ├────────────────────────────────────┼─────────────────┼───────────┼─────────────────┼───────────┤
+ │ $StringUtils.rightPad($values.get(15), 34) │ $StringUtils.leftPad($values.get(16), 15) │ $StringUtils.leftPad($values.get(17), 9) │ $StringUtils.leftPad($values.get(18), 15) │ $StringUtils.leftPad($values.get(19), 9) │
  └────────────────────────────────────┴─────────────────┴───────────┴─────────────────┴───────────┘

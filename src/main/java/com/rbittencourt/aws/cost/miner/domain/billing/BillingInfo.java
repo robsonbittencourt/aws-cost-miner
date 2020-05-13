@@ -13,6 +13,7 @@ import java.util.Map;
 
 public class BillingInfo {
 
+    public static final String SAVINGS_PLAN_COVERED_USAGE = "SavingsPlanCoveredUsage";
     @JsonAlias({"ProductName", "product/ProductName"})
     private String productName;
 
@@ -93,7 +94,7 @@ public class BillingInfo {
         this.availabilityZone = availabilityZone;
     }
 
-    public boolean getReservedInstance() {
+    public boolean isReservedInstance() {
         return reservedInstance;
     }
 
@@ -142,7 +143,7 @@ public class BillingInfo {
     }
 
     public BigDecimal getCost() {
-        if (!isReservedInstancePurchaseInfo() && getReservedInstance()) {
+        if (!isReservedInstancePurchaseInfo() && isReservedInstance()) {
             return reservedInstances.hourCost(subscriptionId, instanceSize()).multiply(usedHours);
         }
 
@@ -173,12 +174,16 @@ public class BillingInfo {
         return otherFields.get(customFieldName);
     }
 
-    public boolean getSpotInstance() {
+    public boolean isSpotInstance() {
         return itemDescription != null && itemDescription.contains("Spot Instance");
     }
 
-    public boolean getOnDemand() {
-        return itemDescription != null && itemDescription.contains("On Demand");
+    public boolean isOnDemand() {
+        return !isSavingsPlans() && itemDescription != null && itemDescription.contains("On Demand");
+    }
+
+    public boolean isSavingsPlans() {
+        return SAVINGS_PLAN_COVERED_USAGE.equals(recordType);
     }
 
     public boolean isEC2Instance() {

@@ -25,10 +25,10 @@ class AwsCostMinerImpl implements AwsCostMiner {
     public List<MinedData> miningCostData(Report report) {
         Map<String, BillingInfos> billingInfos = dataOrganizer.organizeData(report.buildSearchParameters());
 
-        return minedData(report, billingInfos);
+        return mineData(report, billingInfos);
     }
 
-    private List<MinedData> minedData(Report serviceType, Map<String, BillingInfos> groupedBillingInfos) {
+    private List<MinedData> mineData(Report serviceType, Map<String, BillingInfos> groupedBillingInfos) {
         List<MinedData> minedData = new ArrayList<>();
 
         for (Map.Entry<String, BillingInfos> entry : groupedBillingInfos.entrySet()) {
