@@ -41,6 +41,7 @@ class CostByGroup {
             values.addAll(metricOfType(instanceType, ON_DEMAND, totalHours, totalCost, byPricingModel, groupDescription));
             values.addAll(metricOfType(instanceType, SPOT_INSTANCE, totalHours, totalCost, byPricingModel, groupDescription));
             values.addAll(metricOfType(instanceType, RESERVED_INSTANCE, totalHours, totalCost, byPricingModel, groupDescription));
+            values.addAll(metricOfType(instanceType, SAVINGS_PLAN, totalHours, totalCost, byPricingModel, groupDescription));
             values.addAll(total(entry, groupDescription));
         }
 

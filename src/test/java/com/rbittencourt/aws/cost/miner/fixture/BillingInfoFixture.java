@@ -2,6 +2,7 @@ package com.rbittencourt.aws.cost.miner.fixture;
 
 import com.rbittencourt.aws.cost.miner.domain.billing.BillingInfo;
 import com.rbittencourt.aws.cost.miner.domain.billing.ReservedInstanceInfos;
+import com.rbittencourt.aws.cost.miner.infrastructure.file.SavingPlansDiscountTable;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,6 +17,11 @@ public class BillingInfoFixture {
 
     public BillingInfo build() {
         return this.billingInfo;
+    }
+
+    public BillingInfoFixture withRecordType(String recordType) {
+        this.billingInfo.setRecordType(recordType);
+        return this;
     }
 
     public BillingInfoFixture withProductName(String productName) {
@@ -35,6 +41,11 @@ public class BillingInfoFixture {
 
     public BillingInfoFixture withAvailabilityZone(String availabilityZone) {
         this.billingInfo.setAvailabilityZone(availabilityZone);
+        return this;
+    }
+
+    public BillingInfoFixture withRate(double rate) {
+        this.billingInfo.setRate(new BigDecimal(rate));
         return this;
     }
 
@@ -63,6 +74,11 @@ public class BillingInfoFixture {
         return this;
     }
 
+    public BillingInfoFixture withSavingPlansPriceTable(SavingPlansDiscountTable savingPlansDiscountTable) {
+        this.billingInfo.setSavingPlansDiscountTable(savingPlansDiscountTable);
+        return this;
+    }
+
     public BillingInfoFixture withSubscriptionId(String subscriptionId) {
         this.billingInfo.setSubscriptionId(subscriptionId);
         return this;
@@ -80,6 +96,11 @@ public class BillingInfoFixture {
 
     public BillingInfoFixture onDemand() {
         this.billingInfo.setItemDescription("On Demand");
+        return this;
+    }
+
+    public BillingInfoFixture savingPlan() {
+        this.billingInfo.setRecordType("SavingsPlanNegation");
         return this;
     }
 

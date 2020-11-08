@@ -4,7 +4,8 @@ public enum EC2PricingModel {
 
     ON_DEMAND("On Demand"),
     SPOT_INSTANCE("Spot Instance"),
-    RESERVED_INSTANCE("Reserved Instance");
+    RESERVED_INSTANCE("Reserved Instance"),
+    SAVINGS_PLAN("Savings Plan");
 
     private static final String CUR_RESERVED_INSTANCES_SUBSTRING = "reserved instance applied";
 
@@ -15,15 +16,19 @@ public enum EC2PricingModel {
     }
 
     public static EC2PricingModel byBillingInfo(BillingInfo billingInfo) {
-        if (billingInfo.getOnDemand()) {
+        if (billingInfo.isOnDemand()) {
             return ON_DEMAND;
         }
 
-        if (billingInfo.getSpotInstance()) {
+        if (billingInfo.isSpotInstance()) {
             return SPOT_INSTANCE;
         }
 
-        if (billingInfo.getReservedInstance() || billingInfo.getItemDescription().contains(CUR_RESERVED_INSTANCES_SUBSTRING)) {
+        if (billingInfo.isSavingsPlans()) {
+            return SAVINGS_PLAN;
+        }
+
+        if (billingInfo.isReservedInstance() || billingInfo.getItemDescription().contains(CUR_RESERVED_INSTANCES_SUBSTRING)) {
             return RESERVED_INSTANCE;
         }
 

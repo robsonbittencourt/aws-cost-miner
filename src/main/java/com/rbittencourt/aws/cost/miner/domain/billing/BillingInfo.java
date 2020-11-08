@@ -5,13 +5,18 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.rbittencourt.aws.cost.miner.infrastructure.config.serialization.ReservedInstanceDeserializer;
 import com.rbittencourt.aws.cost.miner.infrastructure.config.serialization.LocalDateTimeDeserializer;
+import com.rbittencourt.aws.cost.miner.infrastructure.file.SavingPlansDiscountTable;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static java.math.RoundingMode.HALF_EVEN;
+
 public class BillingInfo {
+
+    public static final String SAVINGS_PLAN_NEGATION = "SavingsPlanNegation";
 
     @JsonAlias({"ProductName", "product/ProductName"})
     private String productName;
@@ -56,6 +61,8 @@ public class BillingInfo {
 
     private ReservedInstanceInfos reservedInstances;
 
+    private SavingPlansDiscountTable savingPlansDiscountTable;
+
     @JsonAnySetter
     void setOtherFields(String key, String value) {
         otherFields.put(key, value);
@@ -93,7 +100,7 @@ public class BillingInfo {
         this.availabilityZone = availabilityZone;
     }
 
-    public boolean getReservedInstance() {
+    public boolean isReservedInstance() {
         return reservedInstance;
     }
 
@@ -142,8 +149,13 @@ public class BillingInfo {
     }
 
     public BigDecimal getCost() {
-        if (!isReservedInstancePurchaseInfo() && getReservedInstance()) {
+        if (!isReservedInstancePurchaseInfo() && isReservedInstance()) {
             return reservedInstances.hourCost(subscriptionId, instanceSize()).multiply(usedHours);
+        }
+
+        if (isSavingsPlans() && savingPlansDiscountTable != null) {
+            BigDecimal savingPlanDiscount = savingPlansDiscountTable.discount(subscriptionId);
+            return cost.multiply(BigDecimal.ONE.subtract(savingPlanDiscount)).setScale(4, HALF_EVEN).negate();
         }
 
         return cost;
@@ -173,12 +185,16 @@ public class BillingInfo {
         return otherFields.get(customFieldName);
     }
 
-    public boolean getSpotInstance() {
+    public boolean isSpotInstance() {
         return itemDescription != null && itemDescription.contains("Spot Instance");
     }
 
-    public boolean getOnDemand() {
-        return itemDescription != null && itemDescription.contains("On Demand");
+    public boolean isOnDemand() {
+        return !isSavingsPlans() && itemDescription != null && itemDescription.contains("On Demand");
+    }
+
+    public boolean isSavingsPlans() {
+        return SAVINGS_PLAN_NEGATION.equals(recordType);
     }
 
     public boolean isEC2Instance() {
@@ -214,6 +230,10 @@ public class BillingInfo {
 
     public boolean isReservedInstancePurchaseInfo() {
         return usageType != null && usageType.contains("HeavyUsage");
+    }
+
+    public void setSavingPlansDiscountTable(SavingPlansDiscountTable savingPlansDiscountTable) {
+        this.savingPlansDiscountTable = savingPlansDiscountTable;
     }
 
 }
