@@ -17,6 +17,7 @@ public enum InstanceSize {
     XLARGE8("8xlarge", new BigDecimal(64)),
     XLARGE10("10xlarge", new BigDecimal(80)),
     XLARGE16("16xlarge", new BigDecimal(128)),
+    XLARGE24("24xlarge", new BigDecimal(192)),
     XLARGE32("32xlarge", new BigDecimal(256));
 
     InstanceSize(String description, BigDecimal normalizationFactor) {
