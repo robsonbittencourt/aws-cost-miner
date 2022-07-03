@@ -15,6 +15,7 @@ public enum InstanceSize {
     XLARGE2("2xlarge", new BigDecimal(16)),
     XLARGE4("4xlarge", new BigDecimal(32)),
     XLARGE8("8xlarge", new BigDecimal(64)),
+    XLARGE9("9xlarge", new BigDecimal(72)),
     XLARGE10("10xlarge", new BigDecimal(80)),
     XLARGE16("16xlarge", new BigDecimal(128)),
     XLARGE24("24xlarge", new BigDecimal(192)),
